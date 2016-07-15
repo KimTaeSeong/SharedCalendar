@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_menu">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/menu1" android:icon="@drawable/menu01"
+            android:title="일정 보기" />
+        <item android:id="@+id/menu2" android:icon="@drawable/menu02"
+            android:title="일정 비교" />
+        <item android:id="@+id/menu3" android:icon="@drawable/menu03"
+            android:title="나의 일정 코드" />
+    </group>
+<!--
+    <item android:title="My Page">
+        <menu>
+            <item android:id="@+id/menu4" android:icon="@drawable/menu04"
+                android:title="공지사항" />
+            <item android:id="@+id/menu5" android:icon="@drawable/menu05"
+                android:title="나의 주차장" />
+            <item android:id="@+id/menu6" android:icon="@drawable/menu06"
+                android:title="결제/차량정보" />
+            <item android:id="@+id/menu7" android:icon="@drawable/menu07"
+                android:title="관리자 모드로 전환" />
+        </menu>
+    </item>-->
+</menu>
