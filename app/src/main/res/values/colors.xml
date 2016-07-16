@@ -4,4 +4,10 @@
     <color name="color_21a4ff">#21a4ff</color>
     <color name="color_ff2222">#FF2222</color>
     <color name="color_000000">#00000000</color>
+    <color name="color_gray">#5D5D5D</color>
+    <color name="color_lightgray">#BDBDBD</color>
+    <color name="colorPrimary">#2ecc71</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#2ecc71</color>
+    <color name="color_main_grin">#2ecc71</color>
 </resources>
