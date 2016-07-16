@@ -1,9 +1,8 @@
 package com.example.graycrow.sharecalendar.View;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +15,9 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.graycrow.sharecalendar.R;
 
@@ -26,16 +26,20 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-
     private int mWidthPixels, mHeightPixels;
+
+    private String mMailAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-
         setContentView(R.layout.activity_main);
+
+        // 1. mail 주소 가지고 옴
+        SharedPreferences pref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        mMailAddress = pref.getString("email", "");
 
         //NetManager.getInstance().getTodayParkingData(2013, 10, 4, 7244);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,13 +60,20 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        // 2. Navigation veiw 생성
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // 2-1. user info text를 메일주소로
+        View v = navigationView.getHeaderView(0);
+        TextView text = (TextView) v.findViewById(R.id.nav_header_name);
+        text.setText(mMailAddress);
+
         //------------------------------------------------------------//
+
         android.support.v4.app.FragmentManager fragmentManager2 = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
-        fragmentTransaction2.replace(R.id.container, new MainActivityFragment());
+        fragmentTransaction2.replace(R.id.container, new CalendarFragment());
         fragmentTransaction2.commit();
 //-----------------------------------------------------------//
         WindowManager w = getWindowManager();
