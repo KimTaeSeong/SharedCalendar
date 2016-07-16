@@ -1,10 +1,8 @@
-package com.example.graycrow.sharecalendar.View;
+package com.example.graycrow.sharecalendar.View.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +18,7 @@ import com.facebook.FacebookSdk;
 import com.example.graycrow.sharecalendar.R;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -45,10 +44,18 @@ public class LoginActivity extends Activity {
         // 1. 로그인 확인
         if(isLoggedIn())
         {
-            Log.v("CheckLogin", "already loggined");
-
-            Intent intentSubActivity = new Intent(this, MainActivity.class);
-            startActivity(intentSubActivity);
+            try {
+                // 1-1. 만약 로그아웃 요청이 들어온 경우
+                Intent intent = getIntent();
+                String isLogout = intent.getExtras().getString("isLogout");
+                LoginManager.getInstance().logOut();
+            } catch (NullPointerException e) {
+                // 1-2. 로그아웃 요청이 없을 경우 바로 달력화면으로 이동
+                Intent intentSubActivity = new Intent(this, MainActivity.class);
+                intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intentSubActivity);
+            }
         }
 
         // 2. 로그인이 되어 있지 않다면 LoginActivity 보여줌
@@ -90,6 +97,8 @@ public class LoginActivity extends Activity {
 
                 // 5. 메인 페이지로 이동
                 Intent intentSubActivity = new Intent(LoginActivity.this, MainActivity.class);
+                intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intentSubActivity);
             }
             @Override

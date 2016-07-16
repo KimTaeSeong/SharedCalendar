@@ -8,18 +8,21 @@
             android:title="일정 비교" />
         <item android:id="@+id/menu3" android:icon="@drawable/menu03"
             android:title="나의 일정 코드" />
+        <item android:id="@+id/menu_logout" android:icon="@drawable/icon_logout"
+            android:title="로그아웃" />
     </group>
-<!--
-    <item android:title="My Page">
-        <menu>
-            <item android:id="@+id/menu4" android:icon="@drawable/menu04"
-                android:title="공지사항" />
-            <item android:id="@+id/menu5" android:icon="@drawable/menu05"
-                android:title="나의 주차장" />
-            <item android:id="@+id/menu6" android:icon="@drawable/menu06"
-                android:title="결제/차량정보" />
-            <item android:id="@+id/menu7" android:icon="@drawable/menu07"
-                android:title="관리자 모드로 전환" />
-        </menu>
-    </item>-->
+
+    <!--
+        <item android:title="My Page">
+            <menu>
+                <item android:id="@+id/menu4" android:icon="@drawable/menu04"
+                    android:title="공지사항" />
+                <item android:id="@+id/menu5" android:icon="@drawable/menu05"
+                    android:title="나의 주차장" />
+                <item android:id="@+id/menu6" android:icon="@drawable/menu06"
+                    android:title="결제/차량정보" />
+                <item android:id="@+id/menu7" android:icon="@drawable/menu07"
+                    android:title="관리자 모드로 전환" />
+            </menu>
+        </item>-->
 </menu>

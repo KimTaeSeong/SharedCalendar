@@ -1,7 +1,8 @@
-package com.example.graycrow.sharecalendar.View;
+package com.example.graycrow.sharecalendar.View.Activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Build;
@@ -18,8 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.R;
+import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         setContentView(R.layout.activity_main);
@@ -71,10 +75,10 @@ public class MainActivity extends AppCompatActivity
 
         //------------------------------------------------------------//
 
-        android.support.v4.app.FragmentManager fragmentManager2 = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
-        fragmentTransaction2.replace(R.id.container, new CalendarFragment());
-        fragmentTransaction2.commit();
+        android.support.v4.app.FragmentManager fm_calendar = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fmTransaction_calendar = fm_calendar.beginTransaction();
+        fmTransaction_calendar.replace(R.id.container, new CalendarFragment());
+        fmTransaction_calendar.commit();
 //-----------------------------------------------------------//
         WindowManager w = getWindowManager();
         Display d = w.getDefaultDisplay();
@@ -134,18 +138,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-/*
         android.support.v4.app.FragmentManager fragmentManager2 = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
 
-
-
         int id = item.getItemId();
 
-        if (id == R.id.menu1) {
-            fragmentTransaction2.replace(R.id.container, new MyMapFragment());
-            fragmentTransaction2.commit();
-        } else if (id == R.id.menu2) {
+        if (id == R.id.menu_logout) {
+            Intent intentSubActivity = new Intent(this, LoginActivity.class);
+            intentSubActivity.putExtra("isLogout", "true");
+            intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intentSubActivity);
+            Toast.makeText(getApplicationContext(), "로그아웃 하셨습니다!", Toast.LENGTH_LONG);
+        } /*else if (id == R.id.menu2) {
 
         }else if (id == R.id.menu4) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -186,8 +191,8 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "사용자 모드로 전환되었습니다", Toast.LENGTH_SHORT).show();
                 item.setTitle("관리자모드로 전환");
             }
-        }
-
+        }*/
+/*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);*/
         return true;

@@ -1,17 +1,21 @@
-package com.example.graycrow.sharecalendar.View;
+package com.example.graycrow.sharecalendar.View.Fragment;
 
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.R;
 
@@ -22,9 +26,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class CalendarFragment extends android.support.v4.app.Fragment {
     private View mView;
 
@@ -91,9 +92,13 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             //오늘 day 가져옴
             Integer today = mCal.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
+            if(position % 7 == 0)
+                holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_ff2222));
+            else if(position % 7 == 6)
+                holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_21a4ff));
 
             if (sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
-                holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_ff2222));
+                holder.tvItemDate.setBackgroundColor(getResources().getColor(R.color.color_lightgray));
             }
             return convertView;
         }
@@ -137,17 +142,31 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        //tvDate = (TextView)getActivity().findViewById(R.id.);
-
+        // 1. 그리드뷰 생성 및 이벤트 리스너 등록
         mView = inflater.inflate(R.layout.fragment_main, container, false);
         mGridView = (GridView)mView.findViewById(R.id.gridview_calendar);
 
-        // 오늘에 날짜를 세팅 해준다.
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                android.support.v4.app.Fragment fragment = new DayViewFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace( R.id.container, fragment );
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                fragmentTransaction.commit();
+
+                Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        // 2. 오늘 날짜 셋팅
         long now = System.currentTimeMillis();
         final Date date = new Date(now);
 
+        // 3. 캘린더 생성
         setCalendar(date);
+
         return mView;
     }
 }

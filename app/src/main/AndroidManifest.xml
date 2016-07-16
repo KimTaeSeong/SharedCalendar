@@ -19,7 +19,7 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".View.LoginActivity"
+            android:name=".View.Activity.LoginActivity"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.Activity.MainActivity"
             android:label="@string/title_activity_main"
 
             android:theme="@style/AppTheme.NoActionBar" >
