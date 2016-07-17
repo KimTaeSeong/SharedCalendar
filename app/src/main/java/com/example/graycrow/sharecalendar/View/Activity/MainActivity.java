@@ -25,6 +25,11 @@ import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.R;
 import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
+import com.example.graycrow.sharecalendar.View.Fragment.DayViewFragment;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity
@@ -36,9 +41,13 @@ public class MainActivity extends AppCompatActivity
 
     private String mMailAddress;
 
+    public Date mSelectedDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        long now = System.currentTimeMillis();
+        mSelectedDate = new Date(now);
 
         /*
         DBManager dbm = new DBManager(this);
@@ -109,12 +118,12 @@ public class MainActivity extends AppCompatActivity
         text.setText(mMailAddress);
 
         //------------------------------------------------------------//
-
         android.support.v4.app.FragmentManager fm_calendar = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fmTransaction_calendar = fm_calendar.beginTransaction();
         fmTransaction_calendar.replace(R.id.container_main, new CalendarFragment());
         fmTransaction_calendar.commit();
-//-----------------------------------------------------------//
+        //-----------------------------------------------------------//
+
         WindowManager w = getWindowManager();
         Display d = w.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -139,11 +148,6 @@ public class MainActivity extends AppCompatActivity
             } catch (Exception ignored) {
             }
         }
-        //-----------------------------------------------------------//
-/*
-        fragmentTransaction.replace(R.id.container, new Fragment_ad());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();*/
     }
 
 
@@ -166,10 +170,9 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         else if(id == R.id.action_add){
-            /*
-            DialogFragment newFragment = new TimePickerFragment();
-            newFragment.show(getSupportFragmentManager(), "timePicker");*/
             Intent intentSubActivity = new Intent(MainActivity.this, InputActivity.class);
+            DateFormat sdFormat = new SimpleDateFormat("yyyyMMdd HH:mm");
+            intentSubActivity.putExtra("selectedDate", sdFormat.format(mSelectedDate));
             startActivity(intentSubActivity);
         }
 

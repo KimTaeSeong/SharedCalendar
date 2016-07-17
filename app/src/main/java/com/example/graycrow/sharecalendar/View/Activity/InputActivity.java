@@ -1,61 +1,89 @@
 package com.example.graycrow.sharecalendar.View.Activity;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.graycrow.sharecalendar.R;
-import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
-import com.example.graycrow.sharecalendar.View.Fragment.InputFragment;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class InputActivity extends AppCompatActivity {
-    private int mWidthPixels, mHeightPixels;
+    private Date mSelectedDate;
+    private Date mStartdDate;
+    private Date mEndDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
 
+        // 1. 기본 툴바 title 제거
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.setTitle("");
 
-        FragmentManager fm_calendar = getSupportFragmentManager();
-        FragmentTransaction fmTransaction_calendar = fm_calendar.beginTransaction();
-        fmTransaction_calendar.replace(R.id.container_input, new InputFragment());
-        fmTransaction_calendar.commit();
+        // 2. Spinner 설정
+        List<String> weatherList = new ArrayList<String>();
+        weatherList.add("없음");
+        weatherList.add("맑음");
+        weatherList.add("구름");
+        weatherList.add("비");
+        weatherList.add("눈");
 
-        //-----------------------------------------------------------//
-        WindowManager w = getWindowManager();
-        Display d = w.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        d.getMetrics(metrics);
-        // since SDK_INT = 1;
-        mWidthPixels = metrics.widthPixels;
-        mHeightPixels = metrics.heightPixels;
+        List<String> colorList = new ArrayList<String>();
+        colorList.add("파랑");
+        colorList.add("빨강");
+        colorList.add("초록");
+        colorList.add("노랑");
 
-        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
-            try {
-                mWidthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
-                mHeightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
-            } catch (Exception ignored) {
-            }
-        // 상태바와 메뉴바의 크기를 포함
-        if (Build.VERSION.SDK_INT >= 17) {
-            try {
-                Point realSize = new Point();
-                Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
-                mWidthPixels = realSize.x;
-                mHeightPixels = realSize.y;
-            } catch (Exception ignored) {
-            }
+        Spinner weatherSpinner = (Spinner)this.findViewById(R.id.weather_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.weather_row, weatherList);
+        weatherSpinner.setAdapter(adapter);
+
+        Spinner colorSpinner = (Spinner)this.findViewById(R.id.color_spinner);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, R.layout.color_row, colorList);
+        colorSpinner.setAdapter(adapter2);
+
+        // 3. 이전 액티비티로 부터 날짜를 가지고 옴
+        DateFormat sdFormat = new SimpleDateFormat("yyyyMMdd HH:mm");
+        Intent intent = getIntent();
+        try {
+            mSelectedDate = sdFormat.parse(intent.getExtras().getString("selectedDate"));
+        }catch (ParseException pe){
+            // 예외 발생시 오늘 날짜로 지정
+            long now = System.currentTimeMillis();
+            mSelectedDate = new Date(now);
+        }
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.infrag_create_btn:
+                // 1. 옵션 정보들을 가지고 옴
+
+                // 2. 데이터베이스에 저장
+
+                // 3. 액티비티 재 호출
+                break;
+            case R.id.infrag_cancel_btn:
+                this.onBackPressed();
+                //getActivity().moveTaskToBack(false);
+                break;
         }
     }
 }

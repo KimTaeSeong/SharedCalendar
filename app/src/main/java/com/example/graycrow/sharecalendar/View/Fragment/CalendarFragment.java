@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.R;
+import com.example.graycrow.sharecalendar.View.Activity.MainActivity;
 
 import org.w3c.dom.Text;
 
@@ -152,15 +153,28 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
+                // 1.1 플래그먼트 이동
                 android.support.v4.app.Fragment fragment = new DayViewFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace( R.id.container_main, fragment );
+                fragmentTransaction.replace(R.id.container_main, fragment);
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 fragmentTransaction.commit();
 
-                Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+                // 1-2. 선택된 날짜를 MainActivity 변수에 저장
+                Date selectedDate = mDate;
+                int selectedDateInteger;
+                try {
+                    selectedDateInteger = Integer.parseInt(mDayList.get(position));
+                }catch (NumberFormatException e)
+                {
+                    // 1-3. 잘못된 영역 선택시 오늘 날짜로 저장
+                    selectedDateInteger = mDate.getDate();
+                }
+                selectedDate.setDate(selectedDateInteger);
 
+                ((MainActivity)getActivity()).mSelectedDate = selectedDate;
+                Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -176,6 +190,12 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         return mView;
     }
 
+    public void callInputView()
+    {
+
+    }
+
+    /* 달력 월 이동 */
     public void moveTextOnClick(View v) {
         TextView textLeftView = (TextView)v.findViewById(R.id.main_left_arrow);
         TextView textRightView = (TextView)v.findViewById(R.id.main_right_arrow);
@@ -189,15 +209,5 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             mDate.setMonth(mDate.getMonth() + 1);
         }
         setCalendar(mDate);
-        /*
-        switch((TextView)v.findViewById(R.id.main_left_arrow)) {
-            case R.id.main_left_arrow:
-
-                break;
-
-            case R.id.main_right_arrow:
-
-                break;
-        }*/
     }
 }
