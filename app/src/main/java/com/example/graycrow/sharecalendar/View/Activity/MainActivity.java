@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,17 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.graycrow.sharecalendar.Model.DBManager;
+import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.example.graycrow.sharecalendar.Model.WEATHER;
 import com.example.graycrow.sharecalendar.R;
 import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
+import com.example.graycrow.sharecalendar.View.Fragment.TimePickerFragment;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
@@ -36,6 +46,48 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*
+        DBManager dbm = new DBManager(this);
+        try {
+            dbm.openDataBase();
+
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
+            dbm.deleteAll();
+            ScheduleInfo sc = new ScheduleInfo();
+            sc.weather = WEATHER.CLOUD;
+            sc.title = "hello";
+            sc.explain = "uhm";
+            sc.st_time = date;
+            date.setMinutes(date.getMinutes() + 30);
+            sc.ed_time = date;
+            sc.email = "kimts";
+
+            ScheduleInfo sc2 = new ScheduleInfo();
+            sc2.weather = WEATHER.CLOUD;
+            sc2.title = "sc2";
+            sc2.explain = "11111";
+            sc2.st_time = date;
+            date.setMinutes(date.getMinutes() + 30);
+            sc2.ed_time = date;
+            sc2.email = "gray";
+
+            dbm.insertSchedule(sc);
+            dbm.insertSchedule(sc2);
+
+            List<ScheduleInfo> list = dbm.selectAllSchedule("gray");
+
+            dbm.deleteAll();
+
+            List<ScheduleInfo> list2 = dbm.selectAllSchedule("gray");
+            int x = 10;
+        }
+        catch (SQLException se)
+        {
+
+        }
+*/
 
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -129,6 +181,10 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        else if(id == R.id.action_add){
+            DialogFragment newFragment = new TimePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "timePicker");
         }
 
         return super.onOptionsItemSelected(item);

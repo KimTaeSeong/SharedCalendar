@@ -30,8 +30,11 @@
         <activity
             android:name=".View.Activity.MainActivity"
             android:label="@string/title_activity_main"
-
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".View.Activity.InputActivity"
+            android:label="@string/title_activity_input" >
         </activity>
     </application>
 

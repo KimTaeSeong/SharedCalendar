@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DayViewBaseFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener{
-    private static final int TYPE_DAY_VIEW = 3;
+    private static final int TYPE_DAY_VIEW = 1;
     private int mWeekViewType;
     private View mView;
     private WeekView mWeekView;
@@ -99,7 +99,7 @@ public class DayViewBaseFragment extends Fragment implements WeekView.EventClick
     }
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(getActivity(), "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Clicked " + event.getName() + " : " + event.getId(), Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
