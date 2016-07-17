@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,17 +23,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.graycrow.sharecalendar.Model.DBManager;
-import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
-import com.example.graycrow.sharecalendar.Model.WEATHER;
 import com.example.graycrow.sharecalendar.R;
 import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
-import com.example.graycrow.sharecalendar.View.Fragment.TimePickerFragment;
 
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
@@ -97,18 +90,8 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences pref = getSharedPreferences("userinfo", MODE_PRIVATE);
         mMailAddress = pref.getString("email", "");
 
-        //NetManager.getInstance().getTodayParkingData(2013, 10, 4, 7244);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -129,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
         android.support.v4.app.FragmentManager fm_calendar = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fmTransaction_calendar = fm_calendar.beginTransaction();
-        fmTransaction_calendar.replace(R.id.container, new CalendarFragment());
+        fmTransaction_calendar.replace(R.id.container_main, new CalendarFragment());
         fmTransaction_calendar.commit();
 //-----------------------------------------------------------//
         WindowManager w = getWindowManager();
@@ -183,8 +166,11 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         else if(id == R.id.action_add){
+            /*
             DialogFragment newFragment = new TimePickerFragment();
-            newFragment.show(getSupportFragmentManager(), "timePicker");
+            newFragment.show(getSupportFragmentManager(), "timePicker");*/
+            Intent intentSubActivity = new Intent(MainActivity.this, InputActivity.class);
+            startActivity(intentSubActivity);
         }
 
         return super.onOptionsItemSelected(item);
@@ -206,51 +192,18 @@ public class MainActivity extends AppCompatActivity
             intentSubActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intentSubActivity);
             Toast.makeText(getApplicationContext(), "로그아웃 하셨습니다!", Toast.LENGTH_LONG);
-        } /*else if (id == R.id.menu2) {
+        }
 
-        }else if (id == R.id.menu4) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-            // 제목셋팅
-            alertDialogBuilder.setTitle("공지 사항");
-            alertDialogBuilder.setMessage(" 1.거주자 우선주차 공유시 거주자 우선주차제비용 할인\n\n" +
-                    " 2.거주자우선주차장에 불법 주차시 견인 조치\n\n" +
-                    " 3.관련문의 : 교통과 박정자 053-661-3046\n\n" +
-                    " 4.광고문의 : 계명대학교 교통공학과 ");
-            // AlertDialog 셋팅
-            alertDialogBuilder
-                    .setCancelable(false)
-                    .setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            // 다이얼로그 생성
-            AlertDialog alertDialog = alertDialogBuilder.create();
-
-            // 다이얼로그 보여주기
-            alertDialog.show();
-        } else if (id == R.id.menu5) {
-
-        } else if (id == R.id.menu6) {
-
-        }else if (id == R.id.menu7) {
-            ConfigMode.switchMode();
-
-            if(ConfigMode.isConfigMode()) {
-                Toast.makeText(this, "관리자 모드로 전환되었습니다", Toast.LENGTH_SHORT).show();
-                item.setTitle("사용자모드로 전환");
-            }
-            else {
-                Toast.makeText(this, "사용자 모드로 전환되었습니다", Toast.LENGTH_SHORT).show();
-                item.setTitle("관리자모드로 전환");
-            }
-        }*/
-/*
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);*/
         return true;
+    }
+
+    /* Titlebar에서 발생하는 클릭 이벤트를 플래그먼트로 넘겨줌 */
+    public void onFragmentViewArrowClick(View v) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_main);
+        if (fragment != null && fragment.isVisible()) {
+            if (fragment instanceof CalendarFragment) {
+                ((CalendarFragment) fragment).moveTextOnClick(v);
+            }
+        }
     }
 }

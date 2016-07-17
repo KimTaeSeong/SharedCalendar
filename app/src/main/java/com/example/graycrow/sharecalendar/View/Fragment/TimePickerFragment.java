@@ -4,6 +4,7 @@ package com.example.graycrow.sharecalendar.View.Fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.DialogFragment;
@@ -12,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.R;
 
@@ -25,17 +28,42 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+        // Convert current minutes to tens
+        // 55 = 50, 56 = 00
+        int minute = c.get(Calendar.MINUTE) / 10;
+        minute = (minute > 5) ? 0 : minute;
 
-        // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        final TimePickerDialog tpd = new TimePickerDialog(getActivity(),
+                android.R.style.Theme_Holo_Light_Dialog, this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
+        /*
+        // Create a new instance of TimePickerDialog and return it
+        final TimePickerDialog tpd = new TimePickerDialog(getActivity(), this, hour, minute,
+                DateFormat.is24HourFormat(getActivity()));*/
+
+        tpd.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                int tpLayoutId = getResources().getIdentifier("timePickerLayout", "id", "android");
+
+                ViewGroup tpLayout = (ViewGroup) tpd.findViewById(tpLayoutId);
+                ViewGroup layout = (ViewGroup) tpLayout.getChildAt(0);
+
+                // Customize minute NumberPicker
+                NumberPicker minutePicker = (NumberPicker) layout.getChildAt(2);
+                minutePicker.setDisplayedValues(new String[]{"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"});
+                minutePicker.setMinValue(0);
+                minutePicker.setMaxValue(11);
+            }
+        });
+
+        return tpd;
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        // Do something with the time chosen by the user
+        minute = minute * 10;
+        Toast.makeText(getActivity(), "Selected minute: " + minute, Toast.LENGTH_LONG).show();
     }
 }

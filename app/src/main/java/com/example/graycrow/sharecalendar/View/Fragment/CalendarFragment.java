@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.R;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +32,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     private GridView mGridView;          // 달력 그리드 뷰
     private ArrayList<String> mDayList;  // 일 저장 리스트
     private Calendar mCal;               // 캘린더 변수
+
+    private Date    mDate;               // 날짜를 저장 할 변수
 
     final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
     final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
@@ -82,18 +86,21 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             }
             holder.tvItemDate.setText("" + getItem(position));
             String str = getItem(position);
-            //holder.tvItemContents.setText("hello");
+
             //해당 날짜 텍스트 컬러,배경 변경
             mCal = Calendar.getInstance();
+
             //오늘 day 가져옴
             Integer today = mCal.get(Calendar.DAY_OF_MONTH);
+            Integer nowMonth = mCal.get(Calendar.MONTH);
+
             String sToday = String.valueOf(today);
             if(position % 7 == 0)
                 holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_ff2222));
             else if(position % 7 == 6)
                 holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_21a4ff));
 
-            if (sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
+            if (sToday.equals(getItem(position)) && nowMonth == mDate.getMonth()) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemDate.setBackgroundColor(getResources().getColor(R.color.color_lightgray));
             }
             return convertView;
@@ -103,8 +110,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     private void setCalendar(Date date)
     {
         // 1. 현재 날짜 텍스트뷰에 뿌려줌
-        //tvDate.setText(curYearFormat.format(date) + "/" + curMonthFormat.format(date));
-        getActivity().setTitle(curYearFormat.format(date) + "/" + curMonthFormat.format(date));
+        TextView titleText = (TextView)getActivity().findViewById(R.id.main_title);
+        titleText.setText(curYearFormat.format(date) + "월 " + curMonthFormat.format(date) + "일");
 
         // 2. gridview 요일 표시
         mDayList = new ArrayList<String>();
@@ -148,7 +155,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 android.support.v4.app.Fragment fragment = new DayViewFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace( R.id.container, fragment );
+                fragmentTransaction.replace( R.id.container_main, fragment );
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 fragmentTransaction.commit();
 
@@ -156,13 +163,41 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
             }
         });
+
         // 2. 오늘 날짜 셋팅
         long now = System.currentTimeMillis();
-        final Date date = new Date(now);
+        mDate = new Date(now);
 
         // 3. 캘린더 생성
-        setCalendar(date);
+        setCalendar(mDate);
 
+        // 4. 제목 없앰
+        getActivity().setTitle("");
         return mView;
+    }
+
+    public void moveTextOnClick(View v) {
+        TextView textLeftView = (TextView)v.findViewById(R.id.main_left_arrow);
+        TextView textRightView = (TextView)v.findViewById(R.id.main_right_arrow);
+
+        if(textLeftView != null)
+        {
+            mDate.setMonth(mDate.getMonth() - 1);
+        }
+        else if(textRightView != null)
+        {
+            mDate.setMonth(mDate.getMonth() + 1);
+        }
+        setCalendar(mDate);
+        /*
+        switch((TextView)v.findViewById(R.id.main_left_arrow)) {
+            case R.id.main_left_arrow:
+
+                break;
+
+            case R.id.main_right_arrow:
+
+                break;
+        }*/
     }
 }

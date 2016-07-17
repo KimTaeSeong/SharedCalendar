@@ -1,39 +1,61 @@
 package com.example.graycrow.sharecalendar.View.Activity;
 
+import android.graphics.Point;
+import android.os.Build;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.example.graycrow.sharecalendar.R;
+import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
+import com.example.graycrow.sharecalendar.View.Fragment.InputFragment;
 
 public class InputActivity extends AppCompatActivity {
+    private int mWidthPixels, mHeightPixels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_input, menu);
-        return true;
-    }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        this.setTitle("");
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        FragmentManager fm_calendar = getSupportFragmentManager();
+        FragmentTransaction fmTransaction_calendar = fm_calendar.beginTransaction();
+        fmTransaction_calendar.replace(R.id.container_input, new InputFragment());
+        fmTransaction_calendar.commit();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //-----------------------------------------------------------//
+        WindowManager w = getWindowManager();
+        Display d = w.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        d.getMetrics(metrics);
+        // since SDK_INT = 1;
+        mWidthPixels = metrics.widthPixels;
+        mHeightPixels = metrics.heightPixels;
+
+        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+            try {
+                mWidthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
+                mHeightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
+            } catch (Exception ignored) {
+            }
+        // 상태바와 메뉴바의 크기를 포함
+        if (Build.VERSION.SDK_INT >= 17) {
+            try {
+                Point realSize = new Point();
+                Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
+                mWidthPixels = realSize.x;
+                mHeightPixels = realSize.y;
+            } catch (Exception ignored) {
+            }
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
