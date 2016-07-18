@@ -1,5 +1,8 @@
 package com.example.graycrow.sharecalendar.View.Activity;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -13,9 +16,11 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.Model.DBManager;
@@ -120,6 +125,7 @@ public class InputActivity extends AppCompatActivity {
         dbManager = new DBManager(this);
     }
 
+    /* 스케줄을 데이터베이스에 저장 */
     private ScheduleInfo saveSchedule() throws SQLException
     {
         dbManager.openDataBase();
@@ -148,9 +154,78 @@ public class InputActivity extends AppCompatActivity {
         long id = dbManager.insertSchedule(scheduleInfo);
         scheduleInfo.id = id;
 
-        List<ScheduleInfo> sc2 = dbManager.selectAllSchedule(scheduleInfo.email);
-
         return scheduleInfo;
+    }
+
+    /* 날짜 클릭 시 DatePicker 호출 */
+    public void onClickDatePicker(View v) {
+        DatePickerDialog dialog;
+        switch (v.getId()) {
+            case R.id.st_date_textview :
+                // 1-1. 시작 날짜 조정
+                dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mStartdDate.setYear(year - 1900);
+                        mStartdDate.setMonth(monthOfYear);
+                        mStartdDate.setDate(dayOfMonth);
+                        stDateTextView.setText(dateFormat.format(mStartdDate));
+
+                        // 1-2. 종료 날짜 자동 일치
+                        mEndDate.setYear(mStartdDate.getYear());
+                        mEndDate.setMonth(mStartdDate.getMonth());
+                        mEndDate.setDate(mStartdDate.getDate());
+                        edDateTextView.setText(dateFormat.format(mEndDate));
+                    }
+                }, mStartdDate.getYear() + 1900, mStartdDate.getMonth(), mStartdDate.getDate());
+                dialog.show();
+                break;
+            case R.id.ed_date_textview :
+                // 2. 종료 날짜 조정
+                dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mEndDate.setYear(year - 1900);
+                        mEndDate.setMonth(monthOfYear);
+                        mEndDate.setDate(dayOfMonth);
+                        edDateTextView.setText(dateFormat.format(mEndDate));
+                    }
+                }, mEndDate.getYear() + 1900, mEndDate.getMonth(), mEndDate.getDate());
+                dialog.show();
+                break;
+        }
+    }
+
+    /* 시간 클릭 시 TimePicker 호출 */
+    public void onClickTimePicker(View v) {
+        TimePickerDialog dialog;
+        switch (v.getId()) {
+            case R.id.st_time_textview :
+                // 1-1. 시작 시간 조정
+                dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        mStartdDate.setHours(hourOfDay);
+                        mStartdDate.setMinutes(minute);
+                        stTimeTextView.setText(timeFormat.format(mStartdDate));
+
+                        // 1-2. 종료 시간을 시작 시간 +1 만큼 더함함
+                        mEndDate = (Date)mStartdDate.clone();
+                        mEndDate.setHours(mEndDate.getHours() + 1);
+                        edTimeTextView.setText(timeFormat.format(mEndDate));
+                    }
+                }, mStartdDate.getHours(), mStartdDate.getMinutes(), false);
+                dialog.show();
+                break;
+            case R.id.ed_time_textview :
+                // 2. 종료 시간 조정
+                dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        mEndDate.setHours(hourOfDay);
+                        mEndDate.setMinutes(minute);
+                        edTimeTextView.setText(timeFormat.format(mEndDate));
+                    }
+                }, mEndDate.getHours(), mEndDate.getMinutes(), false);
+                dialog.show();
+                break;
+        }
     }
 
     public void onClick(View v) {

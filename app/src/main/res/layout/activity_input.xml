@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
             <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
@@ -78,6 +77,7 @@
                     android:layout_width="0dp"
                     android:text="2012년 3월 22일"
                     android:textSize="18dp"
+                    android:onClick="onClickDatePicker"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
                 <TextView
@@ -88,6 +88,7 @@
                     android:layout_width="0dp"
                     android:text="오후 11시 12분"
                     android:textSize="18dp"
+                    android:onClick="onClickTimePicker"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
             </LinearLayout>
@@ -114,6 +115,7 @@
                     android:layout_width="0dp"
                     android:text="2012년 3월 22일"
                     android:textSize="18dp"
+                    android:onClick="onClickDatePicker"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
                 <TextView
@@ -124,6 +126,7 @@
                     android:layout_width="0dp"
                     android:text="오후 11시 12분"
                     android:textSize="18dp"
+                    android:onClick="onClickTimePicker"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
             </LinearLayout>

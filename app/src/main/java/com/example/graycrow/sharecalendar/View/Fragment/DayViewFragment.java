@@ -41,30 +41,35 @@ public class DayViewFragment extends DayViewBaseFragment {
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
 
-        // 3. 저장된 데이터를 모두 가지고 옴
+        // 1. 저장된 데이터를 모두 가지고 옴
         List<ScheduleInfo> list = mDBManager.selectAllSchedule(mUserMail);
 
-        // 4. 이벤트에 추가
+        // 2. 이벤트에 추가
         for (ScheduleInfo info : list) {
             int month = info.st_time.getMonth();
             int year = info.st_time.getYear() + 1900;
 
-            // 4-1. 현재 view와 날짜 비교
+            // 2-1. 현재 view와 날짜 비교
             if (month != newMonth - 1 || year != newYear)
                 continue;
 
-            // 4-2. title 문자열 생성
+            // 2-2. title 문자열 생성
             DateFormat sdFormat = new SimpleDateFormat("HH:mm");
             String title = info.title + " (" + sdFormat.format(info.st_time) + " ~ " + sdFormat.format(info.ed_time) + ")";
 
+            // 2-3. Calendar 생성 후 이벤트 추가
             Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.HOUR_OF_DAY, info.st_time.getHours());
             startTime.set(Calendar.MINUTE, info.st_time.getMinutes());
+            startTime.set(Calendar.HOUR_OF_DAY, info.st_time.getHours());
+            startTime.set(Calendar.DAY_OF_MONTH, info.st_time.getDate());
             startTime.set(Calendar.MONTH, newMonth - 1);
             startTime.set(Calendar.YEAR, newYear);
-            Calendar endTime = (Calendar) startTime.clone();
-            endTime.set(Calendar.HOUR, info.ed_time.getHours());
+            Calendar endTime = Calendar.getInstance();
+            endTime.set(Calendar.MINUTE, info.ed_time.getMinutes());
+            endTime.set(Calendar.HOUR_OF_DAY, info.ed_time.getHours());
+            endTime.set(Calendar.DAY_OF_MONTH, info.ed_time.getDate());
             endTime.set(Calendar.MONTH, newMonth - 1);
+            endTime.set(Calendar.YEAR, newYear);
             WeekViewEvent event = new WeekViewEvent(1, title, startTime, endTime);
 
             if (info.color.equals("파랑"))
@@ -84,7 +89,7 @@ public class DayViewFragment extends DayViewBaseFragment {
 
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-        final long scheduleID = event.getId();
+        final long scheduleID = event.getId();  // Get event`s id
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("삭제 하시겠습니까?");
