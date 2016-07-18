@@ -23,13 +23,17 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.graycrow.sharecalendar.Model.DBManager;
+import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.example.graycrow.sharecalendar.Model.WEATHER;
 import com.example.graycrow.sharecalendar.R;
 import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
-import com.example.graycrow.sharecalendar.View.Fragment.DayViewFragment;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -43,13 +47,14 @@ public class MainActivity extends AppCompatActivity
 
     public Date mSelectedDate;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         long now = System.currentTimeMillis();
         mSelectedDate = new Date(now);
-
-        /*
+/*
         DBManager dbm = new DBManager(this);
         try {
             dbm.openDataBase();
@@ -57,26 +62,29 @@ public class MainActivity extends AppCompatActivity
             Date date = new Date(System.currentTimeMillis());
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
             dbm.deleteAll();
-            ScheduleInfo sc = new ScheduleInfo();
-            sc.weather = WEATHER.CLOUD;
-            sc.title = "hello";
-            sc.explain = "uhm";
-            sc.st_time = date;
-            date.setMinutes(date.getMinutes() + 30);
-            sc.ed_time = date;
-            sc.email = "kimts";
 
             ScheduleInfo sc2 = new ScheduleInfo();
             sc2.weather = WEATHER.CLOUD;
             sc2.title = "sc2";
             sc2.explain = "11111";
+            sc2.color = "파랑";
             sc2.st_time = date;
             date.setMinutes(date.getMinutes() + 30);
             sc2.ed_time = date;
             sc2.email = "gray";
 
-            dbm.insertSchedule(sc);
+            ScheduleInfo sc3 = new ScheduleInfo();
+            sc3.weather = WEATHER.CLOUD;
+            sc3.title = "sc3";
+            sc3.explain = "22222";
+            sc3.color = "빨강";
+            sc3.st_time = date;
+            date.setMinutes(date.getMinutes() + 30);
+            sc3.ed_time = date;
+            sc3.email = "kim";
+
             dbm.insertSchedule(sc2);
+            dbm.insertSchedule(sc3);
 
             List<ScheduleInfo> list = dbm.selectAllSchedule("gray");
 

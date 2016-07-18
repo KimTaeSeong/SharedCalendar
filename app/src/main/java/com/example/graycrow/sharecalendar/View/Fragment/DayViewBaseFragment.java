@@ -1,6 +1,7 @@
 package com.example.graycrow.sharecalendar.View.Fragment;
 
 
+import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -14,18 +15,24 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.example.graycrow.sharecalendar.Model.DBManager;
 import com.example.graycrow.sharecalendar.R;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 public class DayViewBaseFragment extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener{
-    private static final int TYPE_DAY_VIEW = 1;
-    private int mWeekViewType;
+    //private static final int TYPE_DAY_VIEW = 1;
+    //private int mWeekViewType;
     private View mView;
-    private WeekView mWeekView;
+    public WeekView mWeekView;
+
+    public static String mUserMail;
+    public static DBManager mDBManager;
 
     public DayViewBaseFragment() {
         // Required empty public constructor
@@ -49,10 +56,7 @@ public class DayViewBaseFragment extends Fragment implements WeekView.EventClick
 
         setupDateTimeInterpreter(false);
 
-        if (mWeekViewType != TYPE_DAY_VIEW) {
-            mWeekViewType = TYPE_DAY_VIEW;
-            mWeekView.setNumberOfVisibleDays(1);
-        }
+        mWeekView.setNumberOfVisibleDays(1);
 
         // Lets change some dimensions to best fit the view.
         mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
@@ -65,6 +69,15 @@ public class DayViewBaseFragment extends Fragment implements WeekView.EventClick
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_day_view, container, false);
         init();
+
+        SharedPreferences pref = getActivity().getSharedPreferences("userinfo", getActivity().MODE_PRIVATE);
+        mUserMail = pref.getString("email", "");
+        try {
+            mDBManager = new DBManager(getActivity());
+            mDBManager.openDataBase();
+        } catch (SQLException sqlEx) {
+        }
+        super.onStart();
         return mView;
     }
 
@@ -90,10 +103,12 @@ public class DayViewBaseFragment extends Fragment implements WeekView.EventClick
             }
         });
     }
-    @Override
+
+    //@Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         return null;
     }
+
     protected String getEventTitle(Calendar time) {
         return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }

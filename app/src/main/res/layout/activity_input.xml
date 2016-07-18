@@ -45,6 +45,7 @@
             android:orientation="vertical"
             android:weightSum="1">
             <EditText
+                android:id="@+id/edit_title"
                 android:layout_weight="0.1"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
@@ -70,20 +71,22 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
                 <TextView
+                    android:id="@+id/st_date_textview"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.6"
                     android:layout_width="0dp"
-                    android:text="2012년  3월  22일"
+                    android:text="2012년 3월 22일"
                     android:textSize="18dp"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
                 <TextView
+                    android:id="@+id/st_time_textview"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.4"
                     android:layout_width="0dp"
-                    android:text="오후  11시  12분"
+                    android:text="오후 11시 12분"
                     android:textSize="18dp"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
@@ -104,20 +107,22 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
                 <TextView
+                    android:id="@+id/ed_date_textview"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.6"
                     android:layout_width="0dp"
-                    android:text="2012년  3월  22일"
+                    android:text="2012년 3월 22일"
                     android:textSize="18dp"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
                 <TextView
+                    android:id="@+id/ed_time_textview"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.4"
                     android:layout_width="0dp"
-                    android:text="오후  11시  12분"
+                    android:text="오후 11시 12분"
                     android:textSize="18dp"
                     android:textColor="@color/color_date"
                     android:layout_height="fill_parent" />
@@ -181,7 +186,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:orientation="horizontal"

@@ -16,15 +16,22 @@ import java.util.List;
  * Created by graycrow on 2016-07-16.
  */
 public class DBManager extends SQLiteOpenHelper {
-    // private static 로 선언.
+    private static DBManager sInstance;
     private static String TAG = "DBManager";      // Tag just for the LogCat window
     private static String DB_PATH = "";           //destination path (location) of our database on device
     private static String DB_NAME ="mycalendar";  // Database name
     private static SQLiteDatabase mDataBase;
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
+    /*
+    public static synchronized DBManager getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DBManager(context.getApplicationContext());
+        }
+        return sInstance;
+    }*/
+
     public DBManager(Context context) {
         super(context, DB_NAME, null, 1);
-
         // 1. 데이터베이스 버전에 따른 경로 설정
         if(android.os.Build.VERSION.SDK_INT >= 17){
             DB_PATH = context.getApplicationInfo().dataDir + "/db/";
@@ -42,7 +49,7 @@ public class DBManager extends SQLiteOpenHelper {
     {
         // 1. 데이터베이스를 불러옴. 없으면 새로 생성
         mDataBase.execSQL("CREATE TABLE IF NOT EXISTS schedules (" +
-                "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "email          TEXT, "     +
                 "start_time     DATETIME, " +
                 "end_time       DATETIME, " +
@@ -69,7 +76,7 @@ public class DBManager extends SQLiteOpenHelper {
                 break;
 
             ScheduleInfo tmpData = new ScheduleInfo();
-            tmpData.id = c.getLong(c.getColumnIndex("ID"));
+            tmpData.id = c.getLong(c.getColumnIndex("_id"));
             tmpData.email = c.getString(c.getColumnIndex("email"));
             tmpData.title =  c.getString(c.getColumnIndex("title"));
             tmpData.color = c.getString(c.getColumnIndex("color"));
@@ -103,8 +110,8 @@ public class DBManager extends SQLiteOpenHelper {
         insertValues.put("explain", info.explain);
         insertValues.put("color", info.color);
         insertValues.put("weather", info.weather.toString());
-        insertValues.put("start_time", info.st_time.getTime());
-        insertValues.put("end_time", info.st_time.getTime());
+        insertValues.put("start_time", format.format(info.st_time));
+        insertValues.put("end_time", format.format(info.ed_time));
 
         return mDataBase.insert("schedules", null, insertValues);
     }
@@ -127,8 +134,14 @@ public class DBManager extends SQLiteOpenHelper {
         updateValues.put("start_time", info.st_time.getTime());
         updateValues.put("end_time", info.st_time.getTime());
 
-        mDataBase.update("schedules", updateValues, "id=" + info.id, null);
+        mDataBase.update("schedules", updateValues, "_id=" + info.id, null);
     }
+    /* 특정 데이터 삭제 */
+    public void deleteSchedule(String email, long id)
+    {
+        mDataBase.delete("schedules", "email=? and _id=?", new String[]{email, Long.toString(id)});
+    }
+
     /* 모든 데이터 삭제*/
     public void deleteAll()
     {
