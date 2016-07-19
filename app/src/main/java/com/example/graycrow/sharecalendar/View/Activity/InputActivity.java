@@ -258,7 +258,7 @@ public class InputActivity extends AppCompatActivity {
                     ScheduleInfo scheduleInfo = saveSchedule();
                     if(scheduleInfo != null) {
                         // 2. 이를 서버에 전송
-                        //NetManger.getInstance().sendToServer(scheduleInfo);
+                        NetManger.getInstance().sendToServer(scheduleInfo);
 
                         Toast.makeText(getApplicationContext(), "일정 추가 완료", Toast.LENGTH_SHORT);
                         this.onBackPressed();

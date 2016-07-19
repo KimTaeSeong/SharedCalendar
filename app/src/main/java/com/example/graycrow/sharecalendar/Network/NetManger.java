@@ -17,6 +17,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by graycrow on 2016-07-20.
@@ -68,17 +70,6 @@ public class NetManger {
                 {
                     Log.e("ss","ss");
                 }
-/*
-                BufferedReader br = new BufferedReader( new OutputStreamReader( conn.getInputStream(), "EUC-KR" ), conn.getContentLength() );
-                String buf;
-
-                // 표준출력으로 한 라인씩 출력
-                while( ( buf = br.readLine() ) != null ) {
-                    System.out.println( buf );
-                }
-
-                // 스트림을 닫는다.
-                br.close();*/
             }
             // Starts the query
             conn.connect();
@@ -121,6 +112,15 @@ public class NetManger {
     public void sendToServer (ScheduleInfo scheduleInfo) {
         Gson gson = new Gson();
         String json = gson.toJson(scheduleInfo);
-        new HttpReqeusetTask().execute("http://52.78.25.63:8080/api/kimts", "POST", json);
+        try {
+            String x = new HttpReqeusetTask().execute("http://52.78.25.63:8080/api/kimts", "POST", json).get();
+            int xx = 10;
+            xx++;
+        }catch (InterruptedException ie){
+            Log.e("InterruptedException : ", ie.getMessage());
+        }
+        catch (ExecutionException ee){
+            Log.e("ExecutionException : ", ee.getMessage());
+        }
     }
 }
