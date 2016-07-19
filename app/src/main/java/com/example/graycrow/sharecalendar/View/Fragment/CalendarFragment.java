@@ -49,7 +49,9 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
     private class ViewHolder {
         TextView tvItemDate;
-        TextView tvItemContents;
+        TextView tvItemContents1;
+        TextView tvItemContents2;
+        TextView tvItemWeather;
     }
 
     private class GridAdapter extends BaseAdapter {
@@ -76,25 +78,51 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             return position;
         }
 
+        public void setColorTextView(String color, TextView textView)
+        {
+            if (color.equals("파랑"))
+                textView.setTextColor(getResources().getColor(R.color.event_color_01));
+            else if (color.equals("빨강"))
+                textView.setTextColor(getResources().getColor(R.color.event_color_02));
+            else if (color.equals("초록"))
+                textView.setTextColor(getResources().getColor(R.color.event_color_03));
+            else if (color.equals("노랑"))
+                textView.setTextColor(getResources().getColor(R.color.event_color_04));
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
 
             // 1. 현재 날짜에 등록된 일정을 모두 가지고 옴
-            //List<ScheduleInfo> scheduleInfos = dbManager.get
 
-            // 2.
+            // 2. list holder 설정
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_calendar_gridview, parent, false);
                 holder = new ViewHolder();
                 holder.tvItemDate = (TextView) convertView.findViewById(R.id.tv_item_date);
-                holder.tvItemContents = (TextView) convertView.findViewById(R.id.tv_item_contents);
+                holder.tvItemContents1 = (TextView) convertView.findViewById(R.id.tv_item_content1);
+                holder.tvItemContents2 = (TextView) convertView.findViewById(R.id.tv_item_content2);
+                holder.tvItemWeather = (TextView) convertView.findViewById(R.id.tv_item_weather);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+            // 3.
             holder.tvItemDate.setText("" + getItem(position));
-            String str = getItem(position);
+            String date = getItem(position);
+            if(date != "") {
+                List<ScheduleInfo> schedules = dbManager.selectSchedule(mMailAddress, mDate.getYear(), mDate.getMonth(), Integer.parseInt(date));
+
+                if(schedules.size() > 0) {
+                    holder.tvItemContents1.setText(schedules.get(0).title);
+                    setColorTextView(schedules.get(0).color, holder.tvItemContents1);
+                }
+                if(schedules.size() > 1) {
+                    holder.tvItemContents2.setText(schedules.get(1).title);
+                    setColorTextView(schedules.get(1).color, holder.tvItemContents2);
+                }
+            }
 
             //오늘 day 가져옴
             mCal = Calendar.getInstance();
@@ -211,7 +239,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onResume() {
-
+        mGridAdapter.notifyDataSetChanged();
         super.onResume();
     }
 

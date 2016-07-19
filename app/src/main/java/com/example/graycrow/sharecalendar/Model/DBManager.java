@@ -97,7 +97,7 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     /* id와 관련된 모든 db정보를 가지고 옴 */
-    public List<ScheduleInfo> selectSchedule(String strMail, Date startDate)
+    public List<ScheduleInfo> selectSchedule(String strMail, int year, int month, int date)
     {
         List<ScheduleInfo> list = new ArrayList<ScheduleInfo>();
         Cursor c = this.mDataBase.rawQuery("SELECT * FROM schedules WHERE email='" + strMail + "';" , null);
@@ -123,8 +123,8 @@ public class DBManager extends SQLiteOpenHelper {
                 tmpData.ed_time = null;
             }
 
-            if(tmpData.st_time.getDate() == startDate.getDate() && tmpData.st_time.getMonth() == startDate.getMonth()
-                    && tmpData.st_time.getYear() == startDate.getYear())
+            if(tmpData.st_time.getDate() == date && tmpData.st_time.getMonth() == month
+                    && tmpData.st_time.getYear() == year)
                 list.add(tmpData);
         }
         return list;

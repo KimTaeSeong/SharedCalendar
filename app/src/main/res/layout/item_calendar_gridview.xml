@@ -15,14 +15,39 @@
         android:textColor="@color/color_gray"
         />
     <TextView
-        android:layout_weight="0.8"
-        android:gravity="center_horizontal"
-        android:id="@+id/tv_item_contents"
-        android:layout_width="fill_parent"
+        android:layout_weight="0.2"
         android:layout_gravity="left"
+        android:maxLines="1"
+        android:id="@+id/tv_item_content1"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:minLines="3"
+        android:textSize="11sp"
+        android:textColor="@color/color_gray"
+        />
+    <TextView
+        android:layout_weight="0.2"
+        android:layout_gravity="left"
+        android:maxLines="1"
+        android:id="@+id/tv_item_content2"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:textSize="11sp"
+        android:textColor="@color/color_gray"
+        />
+    <TextView
+        android:layout_weight="0.2"
+        android:layout_gravity="left"
+        android:id="@+id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
         android:textSize="15sp"
         android:textColor="@color/color_gray"
+        />
+    <ImageView
+        android:layout_weight="0.2"
+        android:layout_gravity="left"
+        android:id="@+id/tv_item_weather"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
         />
 </LinearLayout>
