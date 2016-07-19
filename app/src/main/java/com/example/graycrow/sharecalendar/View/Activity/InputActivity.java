@@ -129,6 +129,14 @@ public class InputActivity extends AppCompatActivity {
     private ScheduleInfo saveSchedule() throws SQLException
     {
         dbManager.openDataBase();
+
+        if(mStartdDate.getTime() > mEndDate.getTime())
+        {
+            Toast.makeText(getApplicationContext(), "시작시간은 종료시간보다 작아야 합니다", Toast.LENGTH_SHORT);
+            return null;
+        }
+
+
         //dbManager.deleteAll();
         ScheduleInfo scheduleInfo = new ScheduleInfo();
         scheduleInfo.title = titleEditText.getText().toString();
@@ -234,17 +242,16 @@ public class InputActivity extends AppCompatActivity {
                 try {
                     // 1. 옵션 정보들을 가지고 와 데이터베이스에 저장
                     ScheduleInfo scheduleInfo = saveSchedule();
-
-                    // 2. 이를 서버에 전송
-
-                    Toast.makeText(getApplicationContext(), "일정 추가 완료", Toast.LENGTH_LONG);
+                    if(scheduleInfo != null) {
+                        // 2. 이를 서버에 전송
+                        Toast.makeText(getApplicationContext(), "일정 추가 완료", Toast.LENGTH_SHORT);
+                        this.onBackPressed();
+                    }
                 }catch (SQLException sqle)
                 {
                     Log.e("DB Error : ", sqle.getMessage());
                     Toast.makeText(getApplicationContext(), "DB Error!", Toast.LENGTH_LONG);
                 }
-
-                this.onBackPressed();
 
                 break;
             case R.id.infrag_cancel_btn:

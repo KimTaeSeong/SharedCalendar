@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         TextView tvItemDate;
         TextView tvItemContents1;
         TextView tvItemContents2;
-        TextView tvItemWeather;
+        ImageView tvItemWeather;
     }
 
     private class GridAdapter extends BaseAdapter {
@@ -103,7 +104,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 holder.tvItemDate = (TextView) convertView.findViewById(R.id.tv_item_date);
                 holder.tvItemContents1 = (TextView) convertView.findViewById(R.id.tv_item_content1);
                 holder.tvItemContents2 = (TextView) convertView.findViewById(R.id.tv_item_content2);
-                holder.tvItemWeather = (TextView) convertView.findViewById(R.id.tv_item_weather);
+                holder.tvItemWeather = (ImageView) convertView.findViewById(R.id.tv_item_weather);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
