@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,11 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.graycrow.sharecalendar.Model.DBManager;
 import com.example.graycrow.sharecalendar.R;
 import com.example.graycrow.sharecalendar.View.Activity.MainActivity;
 
-import org.w3c.dom.Text;
-
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,8 +34,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     private GridView mGridView;          // 달력 그리드 뷰
     private ArrayList<String> mDayList;  // 일 저장 리스트
     private Calendar mCal;               // 캘린더 변수
-
-    private Date    mDate;               // 날짜를 저장 할 변수
+    private Date mDate;                  // 날짜를 저장 할 변수
+    private DBManager dbManager;
 
     final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
     final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
@@ -54,7 +55,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
 
         public GridAdapter(Context context, List<String> list) {
             this.list = list;
-            this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -76,14 +77,17 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
 
+            // 1. 현재 날짜에 등록된 일정을 모두 가지고 옴
+
+            // 2.
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_calendar_gridview, parent, false);
                 holder = new ViewHolder();
-                holder.tvItemDate = (TextView)convertView.findViewById(R.id.tv_item_date);
-                holder.tvItemContents = (TextView)convertView.findViewById(R.id.tv_item_contents);
+                holder.tvItemDate = (TextView) convertView.findViewById(R.id.tv_item_date);
+                holder.tvItemContents = (TextView) convertView.findViewById(R.id.tv_item_contents);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder)convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
             holder.tvItemDate.setText("" + getItem(position));
             String str = getItem(position);
@@ -96,9 +100,9 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             Integer nowMonth = mCal.get(Calendar.MONTH);
 
             String sToday = String.valueOf(today);
-            if(position % 7 == 0)
+            if (position % 7 == 0)
                 holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_ff2222));
-            else if(position % 7 == 6)
+            else if (position % 7 == 6)
                 holder.tvItemDate.setTextColor(getResources().getColor(R.color.color_21a4ff));
 
             if (sToday.equals(getItem(position)) && nowMonth == mDate.getMonth()) { //오늘 day 텍스트 컬러 변경
@@ -108,10 +112,9 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    private void setCalendar(Date date)
-    {
+    private void setCalendar(Date date) {
         // 1. 현재 날짜 텍스트뷰에 뿌려줌
-        TextView titleText = (TextView)getActivity().findViewById(R.id.main_title);
+        TextView titleText = (TextView) getActivity().findViewById(R.id.main_title);
         titleText.setText(curYearFormat.format(date) + "월 " + curMonthFormat.format(date) + "일");
 
         // 2. gridview 요일 표시
@@ -146,14 +149,25 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // 1. 그리드뷰 생성 및 이벤트 리스너 등록
+        // 1. DB Manger 호출
+        try {
+            dbManager = new DBManager(getActivity());
+            dbManager.openDataBase();
+        }catch (SQLException sqlEx)
+        {
+            Log.e("DB Error", "connect error");
+        }
+
+        // 2. 그리드뷰 생성 및 이벤트 리스너 등록
         mView = inflater.inflate(R.layout.fragment_main, container, false);
-        mGridView = (GridView)mView.findViewById(R.id.gridview_calendar);
+        mGridView = (GridView) mView.findViewById(R.id.gridview_calendar);
+
+
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                // 1.1 플래그먼트 이동
+                // 2.1 플래그먼트 이동
                 android.support.v4.app.Fragment fragment = new DayViewFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -161,51 +175,48 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 fragmentTransaction.commit();
 
-                // 1-2. 선택된 날짜를 MainActivity 변수에 저장
+                // 2-2. 선택된 날짜를 MainActivity 변수에 저장
                 Date selectedDate = mDate;
                 int selectedDateInteger;
                 try {
                     selectedDateInteger = Integer.parseInt(mDayList.get(position));
-                }catch (NumberFormatException e)
-                {
-                    // 1-3. 잘못된 영역 선택시 오늘 날짜로 저장
+                } catch (NumberFormatException e) {
+                    // 2-3. 잘못된 영역 선택시 오늘 날짜로 저장
                     selectedDateInteger = mDate.getDate();
                 }
                 selectedDate.setDate(selectedDateInteger);
 
-                ((MainActivity)getActivity()).mSelectedDate = selectedDate;
+                ((MainActivity) getActivity()).mSelectedDate = selectedDate;
                 Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
 
-        // 2. 오늘 날짜 셋팅
+        // 3. 오늘 날짜 셋팅
         long now = System.currentTimeMillis();
         mDate = new Date(now);
 
-        // 3. 캘린더 생성
+        // 4. 캘린더 생성
         setCalendar(mDate);
 
-        // 4. 제목 없앰
+        // 5. 제목 없앰
         getActivity().setTitle("");
         return mView;
     }
 
-    public void callInputView()
-    {
+    @Override
+    public void onResume() {
 
+        super.onResume();
     }
 
     /* 달력 월 이동 */
     public void moveTextOnClick(View v) {
-        TextView textLeftView = (TextView)v.findViewById(R.id.main_left_arrow);
-        TextView textRightView = (TextView)v.findViewById(R.id.main_right_arrow);
+        TextView textLeftView = (TextView) v.findViewById(R.id.main_left_arrow);
+        TextView textRightView = (TextView) v.findViewById(R.id.main_right_arrow);
 
-        if(textLeftView != null)
-        {
+        if (textLeftView != null) {
             mDate.setMonth(mDate.getMonth() - 1);
-        }
-        else if(textRightView != null)
-        {
+        } else if (textRightView != null) {
             mDate.setMonth(mDate.getMonth() + 1);
         }
         setCalendar(mDate);
