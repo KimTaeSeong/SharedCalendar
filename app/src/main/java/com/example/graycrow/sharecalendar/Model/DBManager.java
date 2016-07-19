@@ -80,8 +80,8 @@ public class DBManager extends SQLiteOpenHelper {
             tmpData.id = c.getLong(c.getColumnIndex("_id"));
             tmpData.email = c.getString(c.getColumnIndex("email"));
             tmpData.title =  c.getString(c.getColumnIndex("title"));
-            tmpData.color = c.getString(c.getColumnIndex("color"));
             tmpData.explain =  c.getString(c.getColumnIndex("explain"));
+            tmpData.color = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
             tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
             try {
                 tmpData.st_time = format.parse(c.getString(c.getColumnIndex("start_time")));
@@ -111,8 +111,8 @@ public class DBManager extends SQLiteOpenHelper {
             tmpData.id = c.getLong(c.getColumnIndex("_id"));
             tmpData.email = c.getString(c.getColumnIndex("email"));
             tmpData.title =  c.getString(c.getColumnIndex("title"));
-            tmpData.color = c.getString(c.getColumnIndex("color"));
             tmpData.explain =  c.getString(c.getColumnIndex("explain"));
+            tmpData.color = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
             tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
             try {
                 tmpData.st_time = format.parse(c.getString(c.getColumnIndex("start_time")));
@@ -144,7 +144,7 @@ public class DBManager extends SQLiteOpenHelper {
         insertValues.put("email", info.email);
         insertValues.put("title", info.title);
         insertValues.put("explain", info.explain);
-        insertValues.put("color", info.color);
+        insertValues.put("color", info.color.toString());
         insertValues.put("weather", info.weather.toString());
         insertValues.put("start_time", format.format(info.st_time));
         insertValues.put("end_time", format.format(info.ed_time));
@@ -165,7 +165,7 @@ public class DBManager extends SQLiteOpenHelper {
         ContentValues updateValues = new ContentValues();
         updateValues.put("title", info.title);
         updateValues.put("explain", info.explain);
-        updateValues.put("color", info.color);
+        updateValues.put("color", info.color.toString());
         updateValues.put("weather", info.weather.toString());
         updateValues.put("start_time", info.st_time.getTime());
         updateValues.put("end_time", info.st_time.getTime());

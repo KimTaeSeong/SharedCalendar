@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekViewEvent;
+import com.example.graycrow.sharecalendar.Model.COLORS;
 import com.example.graycrow.sharecalendar.Model.DBManager;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.example.graycrow.sharecalendar.R;
@@ -72,13 +73,15 @@ public class DayViewFragment extends DayViewBaseFragment {
             endTime.set(Calendar.YEAR, newYear);
             WeekViewEvent event = new WeekViewEvent(1, title, startTime, endTime);
 
-            if (info.color.equals("파랑"))
+            if (info.color == COLORS.NONE)
+                event.setColor(getResources().getColor(R.color.color_000000));
+            if (info.color == COLORS.BLUE)
                 event.setColor(getResources().getColor(R.color.event_color_01));
-            else if (info.color.equals("빨강"))
+            else if (info.color == COLORS.RED)
                 event.setColor(getResources().getColor(R.color.event_color_02));
-            else if (info.color.equals("초록"))
+            else if (info.color == COLORS.GREEN)
                 event.setColor(getResources().getColor(R.color.event_color_03));
-            else if (info.color.equals("노랑"))
+            else if (info.color == COLORS.YELLOW)
                 event.setColor(getResources().getColor(R.color.event_color_04));
 
             event.setId(info.id);

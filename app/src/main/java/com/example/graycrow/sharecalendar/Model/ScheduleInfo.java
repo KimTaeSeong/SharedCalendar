@@ -12,7 +12,7 @@ public class ScheduleInfo {
     public String  email   = "";
     public String  title   = "";
     public String  explain = " ";
-    public String  color   = "";
+    public COLORS  color   = COLORS.NONE;
     public WEATHER weather = WEATHER.NONE;
     public Date    st_time;
     public Date    ed_time;

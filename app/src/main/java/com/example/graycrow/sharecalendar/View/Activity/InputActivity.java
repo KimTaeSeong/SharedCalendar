@@ -23,10 +23,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.graycrow.sharecalendar.Model.COLORS;
 import com.example.graycrow.sharecalendar.Model.DBManager;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.example.graycrow.sharecalendar.Model.WEATHER;
+import com.example.graycrow.sharecalendar.Network.NetManger;
 import com.example.graycrow.sharecalendar.R;
+import com.google.gson.Gson;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -64,6 +67,7 @@ public class InputActivity extends AppCompatActivity {
         weatherList.add("눈");
 
         List<String> colorList = new ArrayList<String>();
+        colorList.add("없음");
         colorList.add("파랑");
         colorList.add("빨강");
         colorList.add("초록");
@@ -136,15 +140,25 @@ public class InputActivity extends AppCompatActivity {
             return null;
         }
 
-
         //dbManager.deleteAll();
         ScheduleInfo scheduleInfo = new ScheduleInfo();
         scheduleInfo.title = titleEditText.getText().toString();
         scheduleInfo.st_time = mStartdDate;
         scheduleInfo.ed_time = mEndDate;
-        scheduleInfo.color = mColorSpinner.getSelectedItem().toString();
-        String weatherStr = mWeatherSpinner.getSelectedItem().toString();
+        String colorStr = mColorSpinner.getSelectedItem().toString();
 
+        if(colorStr == "없음")
+            scheduleInfo.color = COLORS.NONE;
+        else if(colorStr == "파랑")
+            scheduleInfo.color = COLORS.BLUE;
+        else if(colorStr == "빨강")
+            scheduleInfo.color = COLORS.RED;
+        else if(colorStr == "초록")
+            scheduleInfo.color = COLORS.GREEN;
+        else if(colorStr == "노랑")
+            scheduleInfo.color = COLORS.YELLOW;
+
+        String weatherStr = mWeatherSpinner.getSelectedItem().toString();
         if(weatherStr == "없음")
             scheduleInfo.weather = WEATHER.NONE;
         else if(weatherStr == "맑음")
@@ -244,6 +258,8 @@ public class InputActivity extends AppCompatActivity {
                     ScheduleInfo scheduleInfo = saveSchedule();
                     if(scheduleInfo != null) {
                         // 2. 이를 서버에 전송
+                        //NetManger.getInstance().sendToServer(scheduleInfo);
+
                         Toast.makeText(getApplicationContext(), "일정 추가 완료", Toast.LENGTH_SHORT);
                         this.onBackPressed();
                     }

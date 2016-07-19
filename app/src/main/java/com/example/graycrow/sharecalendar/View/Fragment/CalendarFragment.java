@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.graycrow.sharecalendar.Model.COLORS;
 import com.example.graycrow.sharecalendar.Model.DBManager;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.example.graycrow.sharecalendar.R;
@@ -79,15 +80,15 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             return position;
         }
 
-        public void setColorTextView(String color, TextView textView)
+        public void setColorTextView(COLORS color, TextView textView)
         {
-            if (color.equals("파랑"))
+            if (color == COLORS.BLUE)
                 textView.setTextColor(getResources().getColor(R.color.event_color_01));
-            else if (color.equals("빨강"))
+            else if (color == COLORS.RED)
                 textView.setTextColor(getResources().getColor(R.color.event_color_02));
-            else if (color.equals("초록"))
+            else if (color == COLORS.GREEN)
                 textView.setTextColor(getResources().getColor(R.color.event_color_03));
-            else if (color.equals("노랑"))
+            else if (color == COLORS.YELLOW)
                 textView.setTextColor(getResources().getColor(R.color.event_color_04));
         }
 

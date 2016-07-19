@@ -114,15 +114,15 @@ public class DayViewBaseFragment extends Fragment implements WeekView.EventClick
     }
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(getActivity(), "Clicked " + event.getName() + " : " + event.getId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Clicked " + event.getName() + " : " + event.getId(), Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(getActivity(), "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onEmptyViewLongPress(Calendar time) {
-        Toast.makeText(getActivity(), "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
     }
 
     public WeekView getWeekView() {
