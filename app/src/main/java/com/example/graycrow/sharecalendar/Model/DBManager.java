@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,6 +95,41 @@ public class DBManager extends SQLiteOpenHelper {
         }
         return list;
     }
+
+    /* id와 관련된 모든 db정보를 가지고 옴 */
+    public List<ScheduleInfo> selectSchedule(String strMail, Date startDate)
+    {
+        List<ScheduleInfo> list = new ArrayList<ScheduleInfo>();
+        Cursor c = this.mDataBase.rawQuery("SELECT * FROM schedules WHERE email='" + strMail + "';" , null);
+
+        while(true)
+        {
+            if(c.moveToNext() == false)
+                break;
+
+            ScheduleInfo tmpData = new ScheduleInfo();
+            tmpData.id = c.getLong(c.getColumnIndex("_id"));
+            tmpData.email = c.getString(c.getColumnIndex("email"));
+            tmpData.title =  c.getString(c.getColumnIndex("title"));
+            tmpData.color = c.getString(c.getColumnIndex("color"));
+            tmpData.explain =  c.getString(c.getColumnIndex("explain"));
+            tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
+            try {
+                tmpData.st_time = format.parse(c.getString(c.getColumnIndex("start_time")));
+                tmpData.ed_time = format.parse(c.getString(c.getColumnIndex("end_time")));
+            }catch (ParseException pe)
+            {
+                tmpData.st_time = null;
+                tmpData.ed_time = null;
+            }
+
+            if(tmpData.st_time.getDate() == startDate.getDate() && tmpData.st_time.getMonth() == startDate.getMonth()
+                    && tmpData.st_time.getYear() == startDate.getYear())
+                list.add(tmpData);
+        }
+        return list;
+    }
+
     /* 스케줄 정보 삽입 */
     public long insertSchedule(ScheduleInfo info) throws SQLException
     {

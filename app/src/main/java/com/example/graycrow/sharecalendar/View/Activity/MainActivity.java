@@ -44,10 +44,7 @@ public class MainActivity extends AppCompatActivity
     private int mWidthPixels, mHeightPixels;
 
     private String mMailAddress;
-
     public Date mSelectedDate;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
 package com.example.graycrow.sharecalendar.View.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.graycrow.sharecalendar.Model.DBManager;
+import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.example.graycrow.sharecalendar.R;
 import com.example.graycrow.sharecalendar.View.Activity.MainActivity;
 
@@ -35,7 +37,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     private ArrayList<String> mDayList;  // 일 저장 리스트
     private Calendar mCal;               // 캘린더 변수
     private Date mDate;                  // 날짜를 저장 할 변수
-    private DBManager dbManager;
+    private DBManager dbManager;         // DB Manger
+    private String mMailAddress;        // 사용자 메일 주소
 
     final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
     final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
@@ -78,6 +81,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             ViewHolder holder = null;
 
             // 1. 현재 날짜에 등록된 일정을 모두 가지고 옴
+            //List<ScheduleInfo> scheduleInfos = dbManager.get
 
             // 2.
             if (convertView == null) {
@@ -92,10 +96,8 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
             holder.tvItemDate.setText("" + getItem(position));
             String str = getItem(position);
 
-            //해당 날짜 텍스트 컬러,배경 변경
-            mCal = Calendar.getInstance();
-
             //오늘 day 가져옴
+            mCal = Calendar.getInstance();
             Integer today = mCal.get(Calendar.DAY_OF_MONTH);
             Integer nowMonth = mCal.get(Calendar.MONTH);
 
@@ -149,6 +151,10 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        SharedPreferences pref = getActivity().getSharedPreferences("userinfo", getActivity().MODE_PRIVATE);
+        mMailAddress = pref.getString("email", "");
+
         // 1. DB Manger 호출
         try {
             dbManager = new DBManager(getActivity());
