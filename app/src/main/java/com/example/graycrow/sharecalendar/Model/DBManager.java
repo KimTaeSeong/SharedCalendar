@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
+import com.example.graycrow.sharecalendar.Model.Enums.WEATHER;
+
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,6 +58,7 @@ public class DBManager extends SQLiteOpenHelper {
                 "end_time       DATETIME, " +
                 "color          TEXT, "     +
                 "weather        TEXT, "     +
+                "location       TEXT, "     +
                 "title          TEXT, "     +
                 "explain        TEXT );");
 
@@ -82,6 +85,7 @@ public class DBManager extends SQLiteOpenHelper {
             tmpData.title =  c.getString(c.getColumnIndex("title"));
             tmpData.explain =  c.getString(c.getColumnIndex("explain"));
             tmpData.color = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
+            tmpData.location = c.getString(c.getColumnIndex("location"));
             tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
             try {
                 tmpData.st_time = format.parse(c.getString(c.getColumnIndex("start_time")));
@@ -112,6 +116,7 @@ public class DBManager extends SQLiteOpenHelper {
             tmpData.email = c.getString(c.getColumnIndex("email"));
             tmpData.title =  c.getString(c.getColumnIndex("title"));
             tmpData.explain =  c.getString(c.getColumnIndex("explain"));
+            tmpData.location = c.getString(c.getColumnIndex("location"));
             tmpData.color = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
             tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
             try {
@@ -145,6 +150,7 @@ public class DBManager extends SQLiteOpenHelper {
         insertValues.put("title", info.title);
         insertValues.put("explain", info.explain);
         insertValues.put("color", info.color.toString());
+        insertValues.put("location", info.location.toString());
         insertValues.put("weather", info.weather.toString());
         insertValues.put("start_time", format.format(info.st_time));
         insertValues.put("end_time", format.format(info.ed_time));
@@ -166,6 +172,7 @@ public class DBManager extends SQLiteOpenHelper {
         updateValues.put("title", info.title);
         updateValues.put("explain", info.explain);
         updateValues.put("color", info.color.toString());
+        updateValues.put("location", info.location.toString());
         updateValues.put("weather", info.weather.toString());
         updateValues.put("start_time", info.st_time.getTime());
         updateValues.put("end_time", info.st_time.getTime());

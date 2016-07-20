@@ -2,24 +2,17 @@ package com.example.graycrow.sharecalendar.View.Fragment;
 
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.RectF;
-import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekViewEvent;
-import com.example.graycrow.sharecalendar.Model.COLORS;
-import com.example.graycrow.sharecalendar.Model.DBManager;
+import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.example.graycrow.sharecalendar.Network.NetManger;
 import com.example.graycrow.sharecalendar.R;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,7 +94,7 @@ public class DayViewFragment extends DayViewBaseFragment {
                 //TODO
                 // 1. DB에서 해당 ID데이터 삭제
                 mDBManager.deleteSchedule(mUserMail, scheduleID);
-
+                NetManger.getInstance().delFromServer(mUserMail, scheduleID);
                 // 2. 갱신
                 mWeekView.notifyDatasetChanged();
                 Toast.makeText(getActivity(), "삭제 완료", Toast.LENGTH_SHORT).show();

@@ -7,6 +7,7 @@ import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -45,11 +46,9 @@ public class NetManger {
 
     private String requestHttp(String myurl, String method, String body) throws IOException {
         InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int len = 500;
 
         try {
+            // 1. Http 셋팅
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
@@ -59,6 +58,7 @@ public class NetManger {
             conn.setRequestMethod(method);
             conn.setDoInput(true);
 
+            // 2. POST일 경우 body 전송
             if (method == "POST") {
                 conn.setDoOutput(true);
                 try {
@@ -71,17 +71,25 @@ public class NetManger {
                     Log.e("ss","ss");
                 }
             }
-            // Starts the query
+
+            // 3. HTTP 요청 후 응답을 받음
             conn.connect();
-            int response = conn.getResponseCode();
-            is = conn.getInputStream();
+            if(conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
-            // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
-            return contentAsString;
+                is = conn.getInputStream();
 
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] byteBuffer = new byte[1024];
+                byte[] byteData = null;
+                int nLength = 0;
+
+                while ((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
+                    baos.write(byteBuffer, 0, nLength);
+                }
+                byteData = baos.toByteArray();
+                return new String(byteData);
+            }
+            return null;
         } finally {
             if (is != null) {
                 is.close();
@@ -113,14 +121,24 @@ public class NetManger {
         Gson gson = new Gson();
         String json = gson.toJson(scheduleInfo);
         try {
-            String x = new HttpReqeusetTask().execute("http://52.78.25.63:8080/api/kimts", "POST", json).get();
-            int xx = 10;
-            xx++;
-        }catch (InterruptedException ie){
-            Log.e("InterruptedException : ", ie.getMessage());
+            new HttpReqeusetTask().execute("http://52.78.25.63:8080/api/" + scheduleInfo.email, "POST", json).get();
+        }catch (InterruptedException e){
+            Log.e("InterruptedException : ", e.getMessage());
         }
-        catch (ExecutionException ee){
-            Log.e("ExecutionException : ", ee.getMessage());
+        catch (ExecutionException e){
+            Log.e("ExecutionException : ", e.getMessage());
+        }
+    }
+
+    /* 서버 데이터 삭제 요청 */
+    public void delFromServer (String email, long id) {
+        try {
+            new HttpReqeusetTask().execute("http://52.78.25.63:8080/api/del/" + email + "/" + Long.toString(id), "GET", null).get();
+        }catch (InterruptedException e){
+            Log.e("InterruptedException : ", e.getMessage());
+        }
+        catch (ExecutionException e){
+            Log.e("ExecutionException : ", e.getMessage());
         }
     }
 }
