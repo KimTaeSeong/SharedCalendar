@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
-import com.example.graycrow.sharecalendar.Model.Enums.WEATHER;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.WEATHER;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -50,15 +50,16 @@ public class DBManager extends SQLiteOpenHelper {
      */
     public boolean openDataBase() throws SQLException
     {
+        //mDataBase.execSQL("DROP TABLE schedules;");
         // 1. 데이터베이스를 불러옴. 없으면 새로 생성
         mDataBase.execSQL("CREATE TABLE IF NOT EXISTS schedules (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "email          TEXT, "     +
                 "start_time     DATETIME, " +
                 "end_time       DATETIME, " +
+                "loc            TEXT, "     +
                 "color          TEXT, "     +
                 "weather        TEXT, "     +
-                "location       TEXT, "     +
                 "title          TEXT, "     +
                 "explain        TEXT );");
 
@@ -80,13 +81,14 @@ public class DBManager extends SQLiteOpenHelper {
                 break;
 
             ScheduleInfo tmpData = new ScheduleInfo();
-            tmpData.id = c.getLong(c.getColumnIndex("_id"));
-            tmpData.email = c.getString(c.getColumnIndex("email"));
-            tmpData.title =  c.getString(c.getColumnIndex("title"));
-            tmpData.explain =  c.getString(c.getColumnIndex("explain"));
-            tmpData.color = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
-            tmpData.location = c.getString(c.getColumnIndex("location"));
-            tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
+            tmpData.id      = c.getLong(c.getColumnIndex("_id"));
+            tmpData.email   = c.getString(c.getColumnIndex("email"));
+            tmpData.title   = c.getString(c.getColumnIndex("title"));
+            tmpData.explain = c.getString(c.getColumnIndex("explain"));
+            tmpData.loc     = c.getString(c.getColumnIndex("loc"));
+            tmpData.color   = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
+            tmpData.weather = WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
+            
             try {
                 tmpData.st_time = format.parse(c.getString(c.getColumnIndex("start_time")));
                 tmpData.ed_time = format.parse(c.getString(c.getColumnIndex("end_time")));
@@ -116,7 +118,7 @@ public class DBManager extends SQLiteOpenHelper {
             tmpData.email = c.getString(c.getColumnIndex("email"));
             tmpData.title =  c.getString(c.getColumnIndex("title"));
             tmpData.explain =  c.getString(c.getColumnIndex("explain"));
-            tmpData.location = c.getString(c.getColumnIndex("location"));
+            tmpData.loc = c.getString(c.getColumnIndex("loc"));
             tmpData.color = COLORS.valueOf(c.getString(c.getColumnIndex("color")));
             tmpData.weather =  WEATHER.valueOf(c.getString(c.getColumnIndex("weather")));
             try {
@@ -150,7 +152,7 @@ public class DBManager extends SQLiteOpenHelper {
         insertValues.put("title", info.title);
         insertValues.put("explain", info.explain);
         insertValues.put("color", info.color.toString());
-        insertValues.put("location", info.location.toString());
+        insertValues.put("loc", info.loc);
         insertValues.put("weather", info.weather.toString());
         insertValues.put("start_time", format.format(info.st_time));
         insertValues.put("end_time", format.format(info.ed_time));
@@ -172,7 +174,7 @@ public class DBManager extends SQLiteOpenHelper {
         updateValues.put("title", info.title);
         updateValues.put("explain", info.explain);
         updateValues.put("color", info.color.toString());
-        updateValues.put("location", info.location.toString());
+        updateValues.put("loc", info.loc.toString());
         updateValues.put("weather", info.weather.toString());
         updateValues.put("start_time", info.st_time.getTime());
         updateValues.put("end_time", info.st_time.getTime());

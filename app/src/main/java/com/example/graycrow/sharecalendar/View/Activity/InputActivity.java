@@ -17,12 +17,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
 import com.example.graycrow.sharecalendar.Model.DBManager;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.LOCATION;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
-import com.example.graycrow.sharecalendar.Model.Enums.WEATHER;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.WEATHER;
 import com.example.graycrow.sharecalendar.Network.NetManger;
 import com.example.graycrow.sharecalendar.R;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -45,34 +47,55 @@ public class InputActivity extends AppCompatActivity {
     private TextView edDateTextView;
     private TextView edTimeTextView;
     private EditText titleEditText;
+    private Spinner  mLocationSpinner;
     private Spinner  mColorSpinner;
     private Spinner  mWeatherSpinner;
     private DBManager dbManager;
 
+    private List<String> mLocationList;
+    private List<String> mWeatherList;
+    private List<String> mColorList;
+
     public void init()
     {
         // 1. Spinner 설정
-        List<String> weatherList = new ArrayList<String>();
-        weatherList.add("없음");
-        weatherList.add("맑음");
-        weatherList.add("구름");
-        weatherList.add("비");
-        weatherList.add("눈");
+        mLocationList = new ArrayList<String>();
+        mLocationList.add("없음");
+        mLocationList.add("서울경기");
+        mLocationList.add("강원");
+        mLocationList.add("충북");
+        mLocationList.add("충남");
+        mLocationList.add("전북");
+        mLocationList.add("전남");
+        mLocationList.add("경북");
+        mLocationList.add("경남");
+        mLocationList.add("제주");
 
-        List<String> colorList = new ArrayList<String>();
-        colorList.add("없음");
-        colorList.add("파랑");
-        colorList.add("빨강");
-        colorList.add("초록");
-        colorList.add("노랑");
+        mWeatherList = new ArrayList<String>();
+        mWeatherList.add("없음");
+        mWeatherList.add("맑음");
+        mWeatherList.add("구름");
+        mWeatherList.add("비");
+        mWeatherList.add("눈");
 
-        Spinner weatherSpinner = (Spinner)this.findViewById(R.id.weather_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.weather_row, weatherList);
-        weatherSpinner.setAdapter(adapter);
+        mColorList = new ArrayList<String>();
+        mColorList.add("없음");
+        mColorList.add("파랑");
+        mColorList.add("빨강");
+        mColorList.add("초록");
+        mColorList.add("노랑");
 
-        Spinner colorSpinner = (Spinner)this.findViewById(R.id.color_spinner);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, R.layout.color_row, colorList);
-        colorSpinner.setAdapter(adapter2);
+        mLocationSpinner = (Spinner)this.findViewById(R.id.location_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.locatoin_row, mLocationList);
+        mLocationSpinner.setAdapter(adapter);
+
+        mWeatherSpinner = (Spinner)this.findViewById(R.id.weather_spinner);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, R.layout.weather_row, mWeatherList);
+        mWeatherSpinner.setAdapter(adapter2);
+
+        mColorSpinner = (Spinner)this.findViewById(R.id.color_spinner);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, R.layout.color_row, mColorList);
+        mColorSpinner.setAdapter(adapter3);
 
         // 2. 시작날짜와 종료날짜 default 설정 후 textview에 출력
         mStartdDate = (Date)mSelectedDate.clone();
@@ -92,8 +115,6 @@ public class InputActivity extends AppCompatActivity {
 
         // 3. 기타 컨트롤
         titleEditText = (EditText)findViewById(R.id.edit_title);
-        mColorSpinner = (Spinner)this.findViewById(R.id.color_spinner);
-        mWeatherSpinner = (Spinner)this.findViewById(R.id.weather_spinner);
     }
 
     @Override
@@ -126,19 +147,39 @@ public class InputActivity extends AppCompatActivity {
     private ScheduleInfo saveSchedule() throws SQLException
     {
         dbManager.openDataBase();
+        String locationStr  = (String)mLocationSpinner.getSelectedItem();
+        String weatherStr   = (String)mWeatherSpinner.getSelectedItem();
+        String colorStr     = (String)mColorSpinner.getSelectedItem();
+        String title        = titleEditText.getText().toString();
 
+        // 1-1. 시간 예외처리
         if(mStartdDate.getTime() > mEndDate.getTime())
         {
-            Toast.makeText(getApplicationContext(), "시작시간은 종료시간보다 작아야 합니다", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "시작시간은 종료시간보다 작아야 합니다", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        // 1-2. 날씨와 지역 예외처리
+        if(weatherStr != "없음" && locationStr == "없음")
+        {
+            Toast.makeText(getApplicationContext(), "날씨를 선택하려면 지역을 설정해주세요!", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        // 1-3. title 예외처리
+        if(title.isEmpty())
+        {
+            Toast.makeText(getApplicationContext(), "일정을 입력해주세요", Toast.LENGTH_SHORT).show();
             return null;
         }
 
         //dbManager.deleteAll();
+        // 2. 데이터 생성
         ScheduleInfo scheduleInfo = new ScheduleInfo();
-        scheduleInfo.title = titleEditText.getText().toString();
+        scheduleInfo.title = title;
         scheduleInfo.st_time = mStartdDate;
         scheduleInfo.ed_time = mEndDate;
-        String colorStr = mColorSpinner.getSelectedItem().toString();
+        scheduleInfo.loc = LOCATION.getInstance().getCitycode(locationStr);
 
         if(colorStr == "없음")
             scheduleInfo.color = COLORS.NONE;
@@ -151,7 +192,6 @@ public class InputActivity extends AppCompatActivity {
         else if(colorStr == "노랑")
             scheduleInfo.color = COLORS.YELLOW;
 
-        String weatherStr = mWeatherSpinner.getSelectedItem().toString();
         if(weatherStr == "없음")
             scheduleInfo.weather = WEATHER.NONE;
         else if(weatherStr == "맑음")
@@ -163,9 +203,11 @@ public class InputActivity extends AppCompatActivity {
         else if(weatherStr == "눈")
             scheduleInfo.weather = WEATHER.SNOW;
 
+        // 3. 이메일 주소 가져옴
         SharedPreferences pref = getSharedPreferences("userinfo", MODE_PRIVATE);
         scheduleInfo.email = pref.getString("email", "");
 
+        // 4. 디비에 등록
         long id = dbManager.insertSchedule(scheduleInfo);
         scheduleInfo.id = id;
 
@@ -253,13 +295,13 @@ public class InputActivity extends AppCompatActivity {
                         // 2. 이를 서버에 전송
                         NetManger.getInstance().sendToServer(scheduleInfo);
 
-                        Toast.makeText(getApplicationContext(), "일정 추가 완료", Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(), "일정 추가 완료", Toast.LENGTH_SHORT).show();
                         this.onBackPressed();
                     }
                 }catch (SQLException sqle)
                 {
                     Log.e("DB Error : ", sqle.getMessage());
-                    Toast.makeText(getApplicationContext(), "DB Error!", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "DB Error!", Toast.LENGTH_LONG).show();
                 }
 
                 break;

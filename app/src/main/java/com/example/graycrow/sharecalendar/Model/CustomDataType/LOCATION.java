@@ -1,4 +1,4 @@
-package com.example.graycrow.sharecalendar.Model.Enums;
+package com.example.graycrow.sharecalendar.Model.CustomDataType;
 
 import java.util.HashMap;
 
@@ -9,9 +9,11 @@ public class LOCATION
 {
     private static HashMap hashMap;
     private static LOCATION instance = new LOCATION();
+
     // 생성자
     private LOCATION () {
         hashMap = new HashMap();
+        hashMap.put("없음", " ");
         hashMap.put("서울경기", "109");
         hashMap.put("강원", "105");
         hashMap.put("충북", "131");
@@ -29,6 +31,13 @@ public class LOCATION
 
     public static String getCitycode(String cityName)
     {
-        return hashMap.get(cityName).toString();
+        String retVal;
+        try {
+            retVal = hashMap.get(cityName).toString();
+        }catch (Exception e){
+            retVal = "";
+        }
+
+        return retVal;
     }
 }

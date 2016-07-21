@@ -1,7 +1,7 @@
 package com.example.graycrow.sharecalendar.Model;
 
-import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
-import com.example.graycrow.sharecalendar.Model.Enums.WEATHER;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.WEATHER;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ public class ScheduleInfo {
     public String  email    = "";
     public String  title    = "";
     public String  explain  = " ";
-    public String  location = "";
+    public String  loc      = "";
     public COLORS  color    = COLORS.NONE;
     public WEATHER weather  = WEATHER.NONE;
     public Date    st_time;

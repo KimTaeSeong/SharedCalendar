@@ -8,7 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekViewEvent;
-import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.example.graycrow.sharecalendar.Network.NetManger;
 import com.example.graycrow.sharecalendar.R;

@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.graycrow.sharecalendar.Model.Enums.COLORS;
+import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
 import com.example.graycrow.sharecalendar.Model.DBManager;
 import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.example.graycrow.sharecalendar.R;

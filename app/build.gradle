@@ -33,4 +33,5 @@ dependencies {
     compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.0'
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.jaredrummler:material-spinner:1.0.9'
 }
