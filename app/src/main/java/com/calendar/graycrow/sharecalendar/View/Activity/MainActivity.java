@@ -1,4 +1,4 @@
-package com.example.graycrow.sharecalendar.View.Activity;
+package com.calendar.graycrow.sharecalendar.View.Activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -22,8 +22,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.graycrow.sharecalendar.R;
-import com.example.graycrow.sharecalendar.View.Fragment.CalendarFragment;
+import com.calendar.graycrow.sharecalendar.R;
+import com.calendar.graycrow.sharecalendar.View.Fragment.CalendarFragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

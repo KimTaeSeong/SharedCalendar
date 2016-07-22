@@ -1,7 +1,6 @@
-package com.example.graycrow.sharecalendar.View.Fragment;
+package com.calendar.graycrow.sharecalendar.View.Fragment;
 
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -9,15 +8,10 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import com.example.graycrow.sharecalendar.R;
 
 import java.util.Calendar;
 

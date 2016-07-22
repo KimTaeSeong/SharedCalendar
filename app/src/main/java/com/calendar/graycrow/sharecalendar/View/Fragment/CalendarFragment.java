@@ -1,4 +1,4 @@
-package com.example.graycrow.sharecalendar.View.Fragment;
+package com.calendar.graycrow.sharecalendar.View.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,11 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
-import com.example.graycrow.sharecalendar.Model.DBManager;
-import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
-import com.example.graycrow.sharecalendar.R;
-import com.example.graycrow.sharecalendar.View.Activity.MainActivity;
+import com.calendar.graycrow.sharecalendar.Model.CustomDataType.COLORS;
+import com.calendar.graycrow.sharecalendar.Model.DBManager;
+import com.calendar.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.calendar.graycrow.sharecalendar.R;
+import com.calendar.graycrow.sharecalendar.View.Activity.MainActivity;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;

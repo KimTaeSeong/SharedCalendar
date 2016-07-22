@@ -1,12 +1,11 @@
-package com.example.graycrow.sharecalendar.Network;
+package com.calendar.graycrow.sharecalendar.Network;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.calendar.graycrow.sharecalendar.Model.ScheduleInfo;
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,11 +14,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by graycrow on 2016-07-20.

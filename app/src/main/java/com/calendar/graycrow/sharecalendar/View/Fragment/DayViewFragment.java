@@ -1,4 +1,4 @@
-package com.example.graycrow.sharecalendar.View.Fragment;
+package com.calendar.graycrow.sharecalendar.View.Fragment;
 
 
 import android.content.DialogInterface;
@@ -8,10 +8,10 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekViewEvent;
-import com.example.graycrow.sharecalendar.Model.CustomDataType.COLORS;
-import com.example.graycrow.sharecalendar.Model.ScheduleInfo;
-import com.example.graycrow.sharecalendar.Network.NetManger;
-import com.example.graycrow.sharecalendar.R;
+import com.calendar.graycrow.sharecalendar.Model.CustomDataType.COLORS;
+import com.calendar.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.calendar.graycrow.sharecalendar.Network.NetManger;
+import com.calendar.graycrow.sharecalendar.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

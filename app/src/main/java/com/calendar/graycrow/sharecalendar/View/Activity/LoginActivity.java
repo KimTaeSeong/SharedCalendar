@@ -1,4 +1,4 @@
-package com.example.graycrow.sharecalendar.View.Activity;
+package com.calendar.graycrow.sharecalendar.View.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 
-import com.example.graycrow.sharecalendar.R;
+import com.calendar.graycrow.sharecalendar.R;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
