@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar.Model.CustomDataType;
+package com.graycrow.calendar.sharecalendar.Model.CustomDataType;
 
 import java.util.HashMap;
 

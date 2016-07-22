@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar;
+package com.graycrow.calendar.sharecalendar;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

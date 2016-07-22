@@ -1,7 +1,7 @@
-package com.calendar.graycrow.sharecalendar.Model;
+package com.graycrow.calendar.sharecalendar.Model;
 
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.COLORS;
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.WEATHER;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.COLORS;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.WEATHER;
 
 import java.util.Date;
 

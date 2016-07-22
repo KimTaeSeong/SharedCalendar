@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "63431393319",
+    "project_id": "firebase-pluscalendar"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63431393319:android:53848c25f6ea8980",
+        "android_client_info": {
+          "package_name": "com.graycrow.calendar.sharecalendar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU1d2HkV5nfEDjSqrlQ4AeHYVX8ClSVqA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

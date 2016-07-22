@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar.Model;
+package com.graycrow.calendar.sharecalendar.Model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.COLORS;
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.WEATHER;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.COLORS;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.WEATHER;
 
 import java.sql.SQLException;
 import java.text.ParseException;

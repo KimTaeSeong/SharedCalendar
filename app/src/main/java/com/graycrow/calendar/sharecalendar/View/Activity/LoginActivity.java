@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar.View.Activity;
+package com.graycrow.calendar.sharecalendar.View.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -15,7 +16,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 
-import com.calendar.graycrow.sharecalendar.R;
+import com.graycrow.calendar.sharecalendar.R;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
@@ -40,6 +41,9 @@ public class LoginActivity extends Activity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
+
+        ImageView logoView = (ImageView)findViewById(R.id.logo_imageview);
+        logoView.setImageResource(R.drawable.logo);
 
         // 1. 로그인 확인
         if(isLoggedIn())

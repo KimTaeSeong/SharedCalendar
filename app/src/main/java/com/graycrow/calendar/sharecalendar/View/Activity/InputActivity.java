@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar.View.Activity;
+package com.graycrow.calendar.sharecalendar.View.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,18 +12,19 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.COLORS;
-import com.calendar.graycrow.sharecalendar.Model.DBManager;
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.LOCATION;
-import com.calendar.graycrow.sharecalendar.Model.ScheduleInfo;
-import com.calendar.graycrow.sharecalendar.Model.CustomDataType.WEATHER;
-import com.calendar.graycrow.sharecalendar.Network.NetManger;
-import com.calendar.graycrow.sharecalendar.R;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.COLORS;
+import com.graycrow.calendar.sharecalendar.Model.DBManager;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.LOCATION;
+import com.graycrow.calendar.sharecalendar.Model.ScheduleInfo;
+import com.graycrow.calendar.sharecalendar.Model.CustomDataType.WEATHER;
+import com.graycrow.calendar.sharecalendar.Network.NetManger;
+import com.graycrow.calendar.sharecalendar.R;
 
 import java.sql.SQLException;
 import java.text.DateFormat;

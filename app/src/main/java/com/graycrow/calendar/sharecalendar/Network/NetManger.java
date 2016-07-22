@@ -1,9 +1,9 @@
-package com.calendar.graycrow.sharecalendar.Network;
+package com.graycrow.calendar.sharecalendar.Network;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.calendar.graycrow.sharecalendar.Model.ScheduleInfo;
+import com.graycrow.calendar.sharecalendar.Model.ScheduleInfo;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;

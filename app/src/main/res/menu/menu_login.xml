@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.calendar.graycrow.sharecalendar.View.Activity.LoginActivity">
+    tools:context="com.graycrow.calendar.sharecalendar.View.Activity.LoginActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" /><!--android:showAsAction="never" -->
 </menu>

@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar.View.Fragment;
+package com.graycrow.calendar.sharecalendar.View.Fragment;
 
 
 import android.app.Dialog;

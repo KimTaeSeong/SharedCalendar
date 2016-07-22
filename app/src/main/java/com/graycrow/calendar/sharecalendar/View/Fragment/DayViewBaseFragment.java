@@ -1,4 +1,4 @@
-package com.calendar.graycrow.sharecalendar.View.Fragment;
+package com.graycrow.calendar.sharecalendar.View.Fragment;
 
 
 import android.content.SharedPreferences;
@@ -14,8 +14,8 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.calendar.graycrow.sharecalendar.Model.DBManager;
-import com.calendar.graycrow.sharecalendar.R;
+import com.graycrow.calendar.sharecalendar.Model.DBManager;
+import com.graycrow.calendar.sharecalendar.R;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
