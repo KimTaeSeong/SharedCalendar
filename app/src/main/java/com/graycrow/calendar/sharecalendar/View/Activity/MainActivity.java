@@ -2,18 +2,23 @@ package com.graycrow.calendar.sharecalendar.View.Activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +27,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.graycrow.calendar.sharecalendar.R;
+import com.graycrow.calendar.sharecalendar.Service.QuickstartPreferences;
+import com.graycrow.calendar.sharecalendar.Service.RegistrationIntentService;
 import com.graycrow.calendar.sharecalendar.View.Fragment.CalendarFragment;
 
 import java.text.DateFormat;
@@ -33,6 +42,9 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener  {
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private int mWidthPixels, mHeightPixels;
@@ -40,59 +52,105 @@ public class MainActivity extends AppCompatActivity
     private String mMailAddress;
     public Date mSelectedDate;
 
+    /**
+     * LocalBroadcast 리시버를 정의한다. 토큰을 획득하기 위한 READY, GENERATING, COMPLETE 액션에 따라 UI에 변화를 준다.
+     */
+    public void registBroadcastReceiver(){
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+
+
+                if(action.equals(QuickstartPreferences.REGISTRATION_READY)){
+                    // 액션이 READY일 경우
+                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                    //mInformationTextView.setVisibility(View.GONE);
+                } else if(action.equals(QuickstartPreferences.REGISTRATION_GENERATING)){
+                    // 액션이 GENERATING일 경우
+                    //mRegistrationProgressBar.setVisibility(ProgressBar.VISIBLE);
+                   // mInformationTextView.setVisibility(View.VISIBLE);
+                    //mInformationTextView.setText(getString(R.string.registering_message_generating));
+                } else if(action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)){
+                    // 액션이 COMPLETE일 경우
+                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                    //mRegistrationButton.setText(getString(R.string.registering_message_complete));
+                    //mRegistrationButton.setEnabled(false);
+                    //String token = intent.getStringExtra("token");
+                    //mInformationTextView.setText(token);
+                }
+
+            }
+        };
+    }
+
+    /**
+     * Instance ID를 이용하여 디바이스 토큰을 가져오는 RegistrationIntentService를 실행한다.
+     */
+    public void getInstanceIdToken() {
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    /**
+     * 앱이 화면에서 사라지면 등록된 LocalBoardcast를 모두 삭제한다.
+     */
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+
+    /**
+     * Google Play Service를 사용할 수 있는 환경이지를 체크한다.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("Google Play Service : ", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 앱이 실행되어 화면에 나타날때 LocalBoardcastManager에 액션을 정의하여 등록한다.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_READY));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_GENERATING));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         long now = System.currentTimeMillis();
         mSelectedDate = new Date(now);
-/*
-        DBManager dbm = new DBManager(this);
-        try {
-            dbm.openDataBase();
-
-            Date date = new Date(System.currentTimeMillis());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
-            dbm.deleteAll();
-
-            ScheduleInfo sc2 = new ScheduleInfo();
-            sc2.weather = WEATHER.CLOUD;
-            sc2.title = "sc2";
-            sc2.explain = "11111";
-            sc2.color = "파랑";
-            sc2.st_time = date;
-            date.setMinutes(date.getMinutes() + 30);
-            sc2.ed_time = date;
-            sc2.email = "gray";
-
-            ScheduleInfo sc3 = new ScheduleInfo();
-            sc3.weather = WEATHER.CLOUD;
-            sc3.title = "sc3";
-            sc3.explain = "22222";
-            sc3.color = "빨강";
-            sc3.st_time = date;
-            date.setMinutes(date.getMinutes() + 30);
-            sc3.ed_time = date;
-            sc3.email = "kim";
-
-            dbm.insertSchedule(sc2);
-            dbm.insertSchedule(sc3);
-
-            List<ScheduleInfo> list = dbm.selectAllSchedule("gray");
-
-            dbm.deleteAll();
-
-            List<ScheduleInfo> list2 = dbm.selectAllSchedule("gray");
-            int x = 10;
-        }
-        catch (SQLException se)
-        {
-
-        }
-*/
 
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         setContentView(R.layout.activity_main);
+
+        // 1. Push를 위한 설정
+        registBroadcastReceiver();
+
 
         // 1. mail 주소 가지고 옴
         SharedPreferences pref = getSharedPreferences("userinfo", MODE_PRIVATE);
