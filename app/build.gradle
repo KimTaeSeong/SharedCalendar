@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.graycrow.calendar.sharecalendar"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -35,5 +35,6 @@ dependencies {
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.jaredrummler:material-spinner:1.0.9'
-    compile 'com.google.android.gms:play-services-gcm:7.5.0'
+    //compile 'com.google.android.gms:play-services-gcm:7.5.0'
+    compile 'com.google.android.gms:play-services:7.5.0'
 }

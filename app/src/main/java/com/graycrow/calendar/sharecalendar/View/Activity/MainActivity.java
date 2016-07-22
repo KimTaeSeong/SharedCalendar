@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
 
-
                 if(action.equals(QuickstartPreferences.REGISTRATION_READY)){
                     // 액션이 READY일 경우
                     //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity
                     //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
                     //mRegistrationButton.setText(getString(R.string.registering_message_complete));
                     //mRegistrationButton.setEnabled(false);
-                    //String token = intent.getStringExtra("token");
+                    String token = intent.getStringExtra("token");
                     //mInformationTextView.setText(token);
                 }
 
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
     }
-
 
     /**
      * Google Play Service를 사용할 수 있는 환경이지를 체크한다.
@@ -148,8 +146,10 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         setContentView(R.layout.activity_main);
 
-        // 1. Push를 위한 설정
+        // 1. Push 토큰 인스턴트 생성
         registBroadcastReceiver();
+        getInstanceIdToken();
+
 
 
         // 1. mail 주소 가지고 옴
