@@ -62,10 +62,6 @@ public class DBManager extends SQLiteOpenHelper {
                 "weather        TEXT, "     +
                 "title          TEXT, "     +
                 "explain        TEXT );");
-
-        mDataBase.execSQL("CREATE TABLE IF NOT EXISTS user_info (" +
-                "id             TEXT, "     +
-                "join_time      DATETIME);");
         return true;
     }
 

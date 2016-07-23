@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.graycrow.calendar.sharecalendar.Network.NetManger;
 import com.graycrow.calendar.sharecalendar.R;
 import com.graycrow.calendar.sharecalendar.Service.QuickstartPreferences;
 import com.graycrow.calendar.sharecalendar.Service.RegistrationIntentService;
@@ -45,12 +46,13 @@ public class MainActivity extends AppCompatActivity
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-    private FragmentManager fragmentManager;
+    private FragmentManager     fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
     private int mWidthPixels, mHeightPixels;
 
     private String mMailAddress;
-    public Date mSelectedDate;
+    public  Date   mSelectedDate;
 
     /**
      * LocalBroadcast 리시버를 정의한다. 토큰을 획득하기 위한 READY, GENERATING, COMPLETE 액션에 따라 UI에 변화를 준다.
@@ -63,22 +65,15 @@ public class MainActivity extends AppCompatActivity
 
                 if(action.equals(QuickstartPreferences.REGISTRATION_READY)){
                     // 액션이 READY일 경우
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                    //mInformationTextView.setVisibility(View.GONE);
+
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_GENERATING)){
                     // 액션이 GENERATING일 경우
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.VISIBLE);
-                   // mInformationTextView.setVisibility(View.VISIBLE);
-                    //mInformationTextView.setText(getString(R.string.registering_message_generating));
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                    //mRegistrationButton.setText(getString(R.string.registering_message_complete));
-                    //mRegistrationButton.setEnabled(false);
                     String token = intent.getStringExtra("token");
-                    //mInformationTextView.setText(token);
+                    NetManger.getInstance().joinToServer(mMailAddress, token);
+                    Log.i("token : ", token);//mInformationTextView.setText(token);
                 }
-
             }
         };
     }
@@ -185,13 +180,14 @@ public class MainActivity extends AppCompatActivity
         Display d = w.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         d.getMetrics(metrics);
+
         // since SDK_INT = 1;
-        mWidthPixels = metrics.widthPixels;
+        mWidthPixels  = metrics.widthPixels;
         mHeightPixels = metrics.heightPixels;
 
         if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
             try {
-                mWidthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
+                mWidthPixels  = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
                 mHeightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
             } catch (Exception ignored) {
             }

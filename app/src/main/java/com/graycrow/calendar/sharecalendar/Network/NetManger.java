@@ -137,4 +137,17 @@ public class NetManger {
             Log.e("ExecutionException : ", e.getMessage());
         }
     }
+
+    /* 서버 회원 등록 */
+    public void joinToServer(String email, String token)
+    {
+        try {
+            new HttpReqeusetTask().execute("http://52.78.25.63:8080/api/" + email + "/" + token, "GET", null).get();
+        }catch (InterruptedException e){
+            Log.e("InterruptedException : ", e.getMessage());
+        }
+        catch (ExecutionException e){
+            Log.e("ExecutionException : ", e.getMessage());
+        }
+    }
 }
