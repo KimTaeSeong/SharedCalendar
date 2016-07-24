@@ -223,7 +223,7 @@ public class CalendarFragment extends android.support.v4.app.Fragment {
                 selectedDate.setDate(selectedDateInteger);
 
                 ((MainActivity) getActivity()).mSelectedDate = selectedDate;
-                Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
 
